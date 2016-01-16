@@ -978,7 +978,7 @@ var Pzl;
             }
             function start(json, queue) {
                 var def = jQuery.Deferred();
-                Core.Log.Information("Provisioning", "Starting");
+                Core.Log.Information("Provisioning", "Starting at URL '" + _spPageContextInfo.webServerRelativeUrl + "'");
                 var queueItems = [];
                 queue.forEach(function (q, index) {
                     if (!Core.ObjectHandlers[q])

@@ -26,7 +26,7 @@ module Pzl.Sites.Core {
     function start(json : Schema.SiteSchema, queue : Array<string>) {
         var def = jQuery.Deferred();
         
-        Log.Information("Provisioning", `Starting`);
+        Log.Information("Provisioning", `Starting at URL '${_spPageContextInfo.webServerRelativeUrl}'`);
         
         var queueItems : Array<Model.TemplateQueueItem> = [];
         queue.forEach((q, index) => {
