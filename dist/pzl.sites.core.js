@@ -868,22 +868,26 @@ var Pzl;
                     return (console && console.log);
                 };
                 Logger.prototype.Information = function (objectHandler, msg) {
+                    if (!this.loggingOptions)
+                        return;
+                    var logMsg = new Date() + " || " + objectHandler + " || " + msg;
                     if (this.loggerEnabled && this.loggingOptions.On) {
-                        var logMsg = new Date() + " || " + objectHandler + " || " + msg;
                         console.log(logMsg);
-                        this.array.push(logMsg);
                     }
+                    this.array.push(logMsg);
                 };
                 Logger.prototype.Error = function (objectHandler, msg) {
+                    if (!this.loggingOptions)
+                        return;
+                    var logMsg = new Date() + " || " + objectHandler + " || " + msg;
                     if (this.loggerEnabled && this.loggingOptions.On) {
-                        var logMsg = new Date() + " || " + objectHandler + " || " + msg;
                         console.log(logMsg);
-                        this.array.push(logMsg);
                     }
+                    this.array.push(logMsg);
                 };
                 Logger.prototype.SaveToFile = function () {
                     var def = jQuery.Deferred();
-                    if (!this.loggingOptions.On || !this.loggingOptions.LoggingFolder) {
+                    if (!this.loggingOptions || !this.loggingOptions.LoggingFolder) {
                         def.resolve();
                         return def.promise();
                     }
