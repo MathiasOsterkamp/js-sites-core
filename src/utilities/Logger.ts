@@ -16,23 +16,25 @@ module Pzl.Sites.Core {
         }
         
         Information(objectHandler: string, msg : string) {
+            if(!this.loggingOptions) return;
+            var logMsg = `${new Date()} || ${objectHandler} || ${msg}`;
             if(this.loggerEnabled && this.loggingOptions.On) {
-                var logMsg = `${new Date()} || ${objectHandler} || ${msg}`;
                 console.log(logMsg);
-                this.array.push(logMsg);
             }
+            this.array.push(logMsg);
         }
         Error(objectHandler: string, msg : string) {
+            if(!this.loggingOptions) return;
+            var logMsg = `${new Date()} || ${objectHandler} || ${msg}`;
             if(this.loggerEnabled && this.loggingOptions.On) {
-                var logMsg = `${new Date()} || ${objectHandler} || ${msg}`;
                 console.log(logMsg);
-                this.array.push(logMsg);
             }
+            this.array.push(logMsg);
         }
         
         SaveToFile() {            
             var def = jQuery.Deferred();
-            if(!this.loggingOptions.On || !this.loggingOptions.LoggingFolder) {
+            if(!this.loggingOptions || !this.loggingOptions.LoggingFolder) {
                 def.resolve();
                 return def.promise();
             }            
