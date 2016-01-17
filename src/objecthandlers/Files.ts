@@ -101,10 +101,15 @@ module Pzl.Sites.Core.ObjectHandlers {
                    promises.push(() => {
                        var def = jQuery.Deferred();  
                        
-                       jQuery.get(`${_spPageContextInfo.siteServerRelativeUrl}/Resources/WebParts/${wp.Contents.FileUrl}`, (xml) => {
+                       var fileUrl = `${_spPageContextInfo.siteServerRelativeUrl}/Resources/WebParts/${wp.Contents.FileUrl}`;
+                       console.log(fileUrl);
+                       jQuery.get(fileUrl, (xml) => {
+                          console.log(index);
+                          console.log(webParts);
                           webParts[index].Contents.Xml = xml;
                           def.resolve(); 
                        }).fail((sender, args) => {
+                           console.log(sender, args);
                           def.resolve(sender, args);  
                        }); 
                        
@@ -114,6 +119,7 @@ module Pzl.Sites.Core.ObjectHandlers {
             });
             
             jQuery.when.apply(jQuery, promises).done(() => {
+                console.log(webParts);
                def.resolve(webParts); 
             });      
             

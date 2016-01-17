@@ -405,10 +405,15 @@ var Pzl;
                             if (wp.Contents.FileUrl) {
                                 promises.push(function () {
                                     var def = jQuery.Deferred();
-                                    jQuery.get(_spPageContextInfo.siteServerRelativeUrl + "/Resources/WebParts/" + wp.Contents.FileUrl, function (xml) {
+                                    var fileUrl = _spPageContextInfo.siteServerRelativeUrl + "/Resources/WebParts/" + wp.Contents.FileUrl;
+                                    console.log(fileUrl);
+                                    jQuery.get(fileUrl, function (xml) {
+                                        console.log(index);
+                                        console.log(webParts);
                                         webParts[index].Contents.Xml = xml;
                                         def.resolve();
                                     }).fail(function (sender, args) {
+                                        console.log(sender, args);
                                         def.resolve(sender, args);
                                     });
                                     return def.promise();
@@ -416,6 +421,7 @@ var Pzl;
                             }
                         });
                         jQuery.when.apply(jQuery, promises).done(function () {
+                            console.log(webParts);
                             def.resolve(webParts);
                         });
                         return def.promise();
