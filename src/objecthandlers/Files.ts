@@ -92,6 +92,33 @@ module Pzl.Sites.Core.ObjectHandlers {
             
             return def.promise();
         }
+        function GetWebPartXml(webParts : Array<Schema.IWebPart>) {
+            var def = jQuery.Deferred();     
+            
+            var promises = [];
+            webParts.forEach((wp, index) => {
+               if(wp.Contents.FileUrl) {
+                   promises.push(() => {
+                       var def = jQuery.Deferred();  
+                       
+                       jQuery.get(`${_spPageContextInfo.siteServerRelativeUrl}/Resources/WebParts/${wp.Contents.FileUrl}`, (xml) => {
+                          webParts[index].Contents.Xml = xml;
+                          def.resolve(); 
+                       }).fail((sender, args) => {
+                          def.resolve(sender, args);  
+                       }); 
+                       
+                       return def.promise();
+                   });
+               } 
+            });
+            
+            jQuery.when.apply(jQuery, promises).done(() => {
+               def.resolve(webParts); 
+            });      
+            
+            return def.promise();
+        }
         export function AddWebPartsToWebPartPage(dest: string, src: string, webParts : Array<Schema.IWebPart>, shouldRemoveExisting: Boolean) {
             var def = jQuery.Deferred();              
             
@@ -106,25 +133,27 @@ module Pzl.Sites.Core.ObjectHandlers {
                 () => {
                     var limitedWebPartManager = file.getLimitedWebPartManager(SP.WebParts.PersonalizationScope.shared);                   
                     
-                    RemoveWebPartsFromFileIfSpecified(clientContext, limitedWebPartManager, shouldRemoveExisting).then(() => {
-                            webParts.forEach(wp => {
-                                Core.Log.Information("Files Web Parts", `Adding web part '${wp.Title}' to zone '${wp.Zone}' for file with URL '${dest}'`);
-                                var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Xml));
-                                var oWebPart = oWebPartDefinition.get_webPart();
-                                limitedWebPartManager.addWebPart(oWebPart, wp.Zone, wp.Order);
-                            });
-                            
-                            clientContext.executeQueryAsync(
-                                () => {
-                                    Core.Log.Information("Files Web Parts", `Provisioning of objects ended`);
-                                    def.resolve();
-                                },
-                                (sender, args) => {
-                                    Core.Log.Information("Files Web Parts", `Provisioning of objects failed for file with Url '${fileUrl}'`)
-                                    Core.Log.Error("Files Web Parts", `${args.get_message()}`)
-                                    def.resolve(sender, args);
+                    RemoveWebPartsFromFileIfSpecified(clientContext, limitedWebPartManager, shouldRemoveExisting).then(() => {                        
+                        GetWebPartXml(webParts).then((webParts : Array<Schema.IWebPart>) => {
+                                webParts.forEach(wp => {
+                                    Core.Log.Information("Files Web Parts", `Adding web part '${wp.Title}' to zone '${wp.Zone}' for file with URL '${dest}'`);
+                                    var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Contents.Xml));
+                                    var oWebPart = oWebPartDefinition.get_webPart();
+                                    limitedWebPartManager.addWebPart(oWebPart, wp.Zone, wp.Order);
                                 });
+                                
+                                clientContext.executeQueryAsync(
+                                    () => {
+                                        Core.Log.Information("Files Web Parts", `Provisioning of objects ended`);
+                                        def.resolve();
+                                    },
+                                    (sender, args) => {
+                                        Core.Log.Information("Files Web Parts", `Provisioning of objects failed for file with Url '${fileUrl}'`)
+                                        Core.Log.Error("Files Web Parts", `${args.get_message()}`)
+                                        def.resolve(sender, args);
+                                    });
                         });
+                    });
                 }, 
                 (sender, args) => {
                     Core.Log.Information("Files Web Parts", `Provisioning of objects failed for file with Url '${fileUrl}'`)

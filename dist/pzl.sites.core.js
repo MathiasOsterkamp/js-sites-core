@@ -3,6 +3,8 @@
 /// <reference path="IContentTypeBinding.ts" />
 /// <reference path="IFolder.ts" />
 /// <reference path="ISecurity.ts" />
+/// <reference path="IContents.ts" />
+/// <reference path="IWebPart.ts" />
 /// <reference path="IWebPart.ts" />
 /// <reference path="IListInstance.ts" />
 /// <reference path="IFile.ts" />
@@ -396,6 +398,28 @@ var Pzl;
                         return def.promise();
                     }
                     Extensions.RemoveWebPartsFromFileIfSpecified = RemoveWebPartsFromFileIfSpecified;
+                    function GetWebPartXml(webParts) {
+                        var def = jQuery.Deferred();
+                        var promises = [];
+                        webParts.forEach(function (wp, index) {
+                            if (wp.Contents.FileUrl) {
+                                promises.push(function () {
+                                    var def = jQuery.Deferred();
+                                    jQuery.get(_spPageContextInfo.siteServerRelativeUrl + "/Resources/WebParts/" + wp.Contents.FileUrl, function (xml) {
+                                        webParts[index].Contents.Xml = xml;
+                                        def.resolve();
+                                    }).fail(function (sender, args) {
+                                        def.resolve(sender, args);
+                                    });
+                                    return def.promise();
+                                });
+                            }
+                        });
+                        jQuery.when.apply(jQuery, promises).done(function () {
+                            def.resolve(webParts);
+                        });
+                        return def.promise();
+                    }
                     function AddWebPartsToWebPartPage(dest, src, webParts, shouldRemoveExisting) {
                         var def = jQuery.Deferred();
                         var clientContext = SP.ClientContext.get_current();
@@ -407,19 +431,21 @@ var Pzl;
                         clientContext.executeQueryAsync(function () {
                             var limitedWebPartManager = file.getLimitedWebPartManager(SP.WebParts.PersonalizationScope.shared);
                             RemoveWebPartsFromFileIfSpecified(clientContext, limitedWebPartManager, shouldRemoveExisting).then(function () {
-                                webParts.forEach(function (wp) {
-                                    Core.Log.Information("Files Web Parts", "Adding web part '" + wp.Title + "' to zone '" + wp.Zone + "' for file with URL '" + dest + "'");
-                                    var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Xml));
-                                    var oWebPart = oWebPartDefinition.get_webPart();
-                                    limitedWebPartManager.addWebPart(oWebPart, wp.Zone, wp.Order);
-                                });
-                                clientContext.executeQueryAsync(function () {
-                                    Core.Log.Information("Files Web Parts", "Provisioning of objects ended");
-                                    def.resolve();
-                                }, function (sender, args) {
-                                    Core.Log.Information("Files Web Parts", "Provisioning of objects failed for file with Url '" + fileUrl + "'");
-                                    Core.Log.Error("Files Web Parts", "" + args.get_message());
-                                    def.resolve(sender, args);
+                                GetWebPartXml(webParts).then(function (webParts) {
+                                    webParts.forEach(function (wp) {
+                                        Core.Log.Information("Files Web Parts", "Adding web part '" + wp.Title + "' to zone '" + wp.Zone + "' for file with URL '" + dest + "'");
+                                        var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Contents.Xml));
+                                        var oWebPart = oWebPartDefinition.get_webPart();
+                                        limitedWebPartManager.addWebPart(oWebPart, wp.Zone, wp.Order);
+                                    });
+                                    clientContext.executeQueryAsync(function () {
+                                        Core.Log.Information("Files Web Parts", "Provisioning of objects ended");
+                                        def.resolve();
+                                    }, function (sender, args) {
+                                        Core.Log.Information("Files Web Parts", "Provisioning of objects failed for file with Url '" + fileUrl + "'");
+                                        Core.Log.Error("Files Web Parts", "" + args.get_message());
+                                        def.resolve(sender, args);
+                                    });
                                 });
                             });
                         }, function (sender, args) {
