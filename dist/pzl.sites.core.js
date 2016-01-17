@@ -319,7 +319,8 @@ var Pzl;
                 var Helpers;
                 (function (Helpers) {
                     function GetFileUrlWithoutTokens(fileUrl) {
-                        return fileUrl.replace(/{resources}/g, _spPageContextInfo.siteServerRelativeUrl + "/resources");
+                        return fileUrl.replace(/{resources}/g, _spPageContextInfo.siteServerRelativeUrl + "/resources")
+                            .replace(/{webpartgallery}/g, _spPageContextInfo.siteServerRelativeUrl + "/_catalogs/wp");
                     }
                     Helpers.GetFileUrlWithoutTokens = GetFileUrlWithoutTokens;
                     function GetWebPartXmlWithoutTokens(xml) {
@@ -403,25 +404,20 @@ var Pzl;
                         var promises = [];
                         webParts.forEach(function (wp, index) {
                             if (wp.Contents.FileUrl) {
-                                promises.push(function () {
+                                promises.push((function () {
                                     var def = jQuery.Deferred();
-                                    var fileUrl = _spPageContextInfo.siteServerRelativeUrl + "/Resources/WebParts/" + wp.Contents.FileUrl;
-                                    console.log(fileUrl);
+                                    var fileUrl = Helpers.GetFileUrlWithoutTokens(wp.Contents.FileUrl);
                                     jQuery.get(fileUrl, function (xml) {
-                                        console.log(index);
-                                        console.log(webParts);
                                         webParts[index].Contents.Xml = xml;
                                         def.resolve();
                                     }).fail(function (sender, args) {
-                                        console.log(sender, args);
                                         def.resolve(sender, args);
                                     });
                                     return def.promise();
-                                });
+                                })());
                             }
                         });
                         jQuery.when.apply(jQuery, promises).done(function () {
-                            console.log(webParts);
                             def.resolve(webParts);
                         });
                         return def.promise();
@@ -439,6 +435,8 @@ var Pzl;
                             RemoveWebPartsFromFileIfSpecified(clientContext, limitedWebPartManager, shouldRemoveExisting).then(function () {
                                 GetWebPartXml(webParts).then(function (webParts) {
                                     webParts.forEach(function (wp) {
+                                        if (!wp.Contents.Xml)
+                                            return;
                                         Core.Log.Information("Files Web Parts", "Adding web part '" + wp.Title + "' to zone '" + wp.Zone + "' for file with URL '" + dest + "'");
                                         var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Contents.Xml));
                                         var oWebPart = oWebPartDefinition.get_webPart();
@@ -925,8 +923,9 @@ var Pzl;
                     }
                     var clientContext = SP.ClientContext.get_current();
                     var web = clientContext.get_site().get_rootWeb();
+                    var fileName = new Date().getTime() + ".txt";
                     var fileCreateInfo = new SP.FileCreationInformation();
-                    fileCreateInfo.set_url(new Date().getTime() + ".txt");
+                    fileCreateInfo.set_url(fileName);
                     fileCreateInfo.set_content(new SP.Base64EncodedByteArray());
                     var fileContent = this.array.join("\n");
                     for (var i = 0; i < fileContent.length; i++) {

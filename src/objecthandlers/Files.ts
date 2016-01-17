@@ -6,7 +6,8 @@
 module Pzl.Sites.Core.ObjectHandlers {
     module Helpers {
         export function GetFileUrlWithoutTokens(fileUrl: string) {
-            return fileUrl.replace(/{resources}/g, `${_spPageContextInfo.siteServerRelativeUrl}/resources`);
+            return fileUrl.replace(/{resources}/g, `${_spPageContextInfo.siteServerRelativeUrl}/resources`)
+                          .replace(/{webpartgallery}/g, `${_spPageContextInfo.siteServerRelativeUrl}/_catalogs/wp`);
         }
         export function GetWebPartXmlWithoutTokens(xml: string) {
             return xml.replace(/{site}/g, _spPageContextInfo.webServerRelativeUrl) 
@@ -98,28 +99,21 @@ module Pzl.Sites.Core.ObjectHandlers {
             var promises = [];
             webParts.forEach((wp, index) => {
                if(wp.Contents.FileUrl) {
-                   promises.push(() => {
-                       var def = jQuery.Deferred();  
-                       
-                       var fileUrl = `${_spPageContextInfo.siteServerRelativeUrl}/Resources/WebParts/${wp.Contents.FileUrl}`;
-                       console.log(fileUrl);
+                   promises.push((() => {
+                       var def = jQuery.Deferred();                         
+                       var fileUrl = Helpers.GetFileUrlWithoutTokens(wp.Contents.FileUrl);
                        jQuery.get(fileUrl, (xml) => {
-                          console.log(index);
-                          console.log(webParts);
                           webParts[index].Contents.Xml = xml;
                           def.resolve(); 
                        }).fail((sender, args) => {
-                           console.log(sender, args);
                           def.resolve(sender, args);  
-                       }); 
-                       
+                       });                        
                        return def.promise();
-                   });
+                   })());
                } 
             });
             
             jQuery.when.apply(jQuery, promises).done(() => {
-                console.log(webParts);
                def.resolve(webParts); 
             });      
             
@@ -142,6 +136,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                     RemoveWebPartsFromFileIfSpecified(clientContext, limitedWebPartManager, shouldRemoveExisting).then(() => {                        
                         GetWebPartXml(webParts).then((webParts : Array<Schema.IWebPart>) => {
                                 webParts.forEach(wp => {
+                                    if(!wp.Contents.Xml) return;
                                     Core.Log.Information("Files Web Parts", `Adding web part '${wp.Title}' to zone '${wp.Zone}' for file with URL '${dest}'`);
                                     var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Contents.Xml));
                                     var oWebPart = oWebPartDefinition.get_webPart();

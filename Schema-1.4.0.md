@@ -357,5 +357,5 @@ Tokens available
 
 Attibute|Token|Description
 --------|----|-----------
-FileUrl|{Resources}|URL to the webpart resources path at /Resources/WebParts on site collection
-FileUrl|{WebPartGallery}|URL to the web part galleryat /_catalogs/wp on site collection
+FileUrl|{resources}|URL to the resources path at /Resources/ on site collection
+FileUrl|{webpartgallery}|URL to the web part galleryat /_catalogs/wp on site collection
