@@ -2,7 +2,7 @@
 <ProjectItem Type="Microsoft.VisualStudio.SharePoint.Module" DefaultFile="Elements.xml" SupportedTrustLevels="All" SupportedDeploymentScopes="Web, Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
   <Files>
     <ProjectItemFile Source="Elements.xml" Target="Scripts\" Type="ElementManifest" />
-    <ProjectItemFile Source="App.ts" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="src\test\test.ts" Target="Scripts\src\test\" Type="ElementFile" />
     <ProjectItemFile Source="jquery-1.9.1.min.map" Target="Scripts\" Type="ElementFile" />
     <ProjectItemFile Source="jquery-1.9.1.min.js" Target="Scripts\" Type="ElementFile" />
     <ProjectItemFile Source="jquery-1.9.1.js" Target="Scripts\" Type="ElementFile" />
@@ -46,6 +46,5 @@
     <ProjectItemFile Source="typings\sharepoint\SharePoint.d.ts" Target="Scripts\typings\sharepoint\" Type="ElementFile" />
     <ProjectItemFile Source="typings\tsd.d.ts" Target="Scripts\typings\" Type="ElementFile" />
     <ProjectItemFile Source="js-site.core.js" Target="Scripts\" Type="ElementFile" />
-    <ProjectItemFile Source="js-site.core.js.map" Target="Scripts\" Type="ElementFile" />
   </Files>
 </ProjectItem>

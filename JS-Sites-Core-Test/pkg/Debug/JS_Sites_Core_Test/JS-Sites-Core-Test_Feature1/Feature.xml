@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Description="SharePoint App Feature" Id="af88bd7e-ba53-4f64-8039-75f9aeee8165" Scope="Web" Title="JS-Sites-Core-Test Feature1" Version="1.0.0.0">
+  <ElementManifests>
+    <ElementManifest Location="Pages\Elements.xml" />
+    <ElementFile Location="Pages\Default.aspx" />
+    <ElementManifest Location="Scripts\Elements.xml" />
+    <ElementFile Location="Scripts\src\test\test.ts" />
+    <ElementFile Location="Scripts\jquery-1.9.1.min.map" />
+    <ElementFile Location="Scripts\jquery-1.9.1.min.js" />
+    <ElementFile Location="Scripts\jquery-1.9.1.js" />
+    <ElementFile Location="Scripts\jquery-1.9.1.intellisense.js" />
+    <ElementFile Location="Scripts\src\model\ILoggingOptions.ts" />
+    <ElementFile Location="Scripts\src\model\IObjectHandler.ts" />
+    <ElementFile Location="Scripts\src\model\ObjectHandlerBase.ts" />
+    <ElementFile Location="Scripts\src\model\TemplateQueueItem.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\ComposedLook.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\CustomActions.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\Files.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\Lists.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\LocalNavigation.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\Pages.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\PropertyBagEntries.ts" />
+    <ElementFile Location="Scripts\src\objecthandlers\WebSettings.ts" />
+    <ElementFile Location="Scripts\src\schema\HiddenView.ts" />
+    <ElementFile Location="Scripts\src\schema\IComposedLook.ts" />
+    <ElementFile Location="Scripts\src\schema\IContents.ts" />
+    <ElementFile Location="Scripts\src\schema\IContentType.ts" />
+    <ElementFile Location="Scripts\src\schema\IContentTypeBinding.ts" />
+    <ElementFile Location="Scripts\src\schema\ICustomAction.ts" />
+    <ElementFile Location="Scripts\src\schema\IFeature.ts" />
+    <ElementFile Location="Scripts\src\schema\IField.ts" />
+    <ElementFile Location="Scripts\src\schema\IFile.ts" />
+    <ElementFile Location="Scripts\src\schema\IFolder.ts" />
+    <ElementFile Location="Scripts\src\schema\IListInstance.ts" />
+    <ElementFile Location="Scripts\src\schema\INavigationNode.ts" />
+    <ElementFile Location="Scripts\src\schema\IPage.ts" />
+    <ElementFile Location="Scripts\src\schema\IRoleAssignment.ts" />
+    <ElementFile Location="Scripts\src\schema\IRoleDefinition.ts" />
+    <ElementFile Location="Scripts\src\schema\ISecurity.ts" />
+    <ElementFile Location="Scripts\src\schema\ISiteSchema.ts" />
+    <ElementFile Location="Scripts\src\schema\IView.ts" />
+    <ElementFile Location="Scripts\src\schema\IWebPart.ts" />
+    <ElementFile Location="Scripts\src\schema\IWebSettings.ts" />
+    <ElementFile Location="Scripts\src\utilities\Logger.ts" />
+    <ElementFile Location="Scripts\src\pzl.sites.core.ts" />
+    <ElementFile Location="Scripts\typings\jquery\jquery.d.ts" />
+    <ElementFile Location="Scripts\typings\microsoft-ajax\microsoft.ajax.d.ts" />
+    <ElementFile Location="Scripts\typings\sharepoint\SharePoint.d.ts" />
+    <ElementFile Location="Scripts\typings\tsd.d.ts" />
+    <ElementFile Location="Scripts\js-site.core.js" />
+    <ElementManifest Location="Content\Elements.xml" />
+    <ElementFile Location="Content\App.css" />
+    <ElementManifest Location="Images\Elements.xml" />
+    <ElementFile Location="Images\AppIcon.png" />
+    <ElementManifest Location="Elements.xml" />
+  </ElementManifests>
+  <UpgradeActions>
+    <VersionRange>
+      <ApplyElementManifests>
+        <ElementManifest Location="Pages\Elements.xml" />
+        <ElementManifest Location="Scripts\Elements.xml" />
+        <ElementManifest Location="Content\Elements.xml" />
+        <ElementManifest Location="Images\Elements.xml" />
+        <ElementManifest Location="Elements.xml" />
+      </ApplyElementManifests>
+    </VersionRange>
+  </UpgradeActions>
+</Feature>

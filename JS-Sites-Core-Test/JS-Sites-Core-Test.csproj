@@ -60,10 +60,11 @@
       <SharePointProjectItemId>{d01dea13-2464-4963-8877-040cd6869d76}</SharePointProjectItemId>
     </None>
     <Content Include="Scripts\Elements.xml" />
-    <TypeScriptCompile Include="Scripts\App.ts" />
+    <TypeScriptCompile Include="Scripts\src\test\test.ts" />
     <Content Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Scripts\js-site.core.js" />
     <Content Include="Scripts\_references.js" />
   </ItemGroup>
   <ItemGroup>

@@ -3,4 +3,14 @@
   <PropertyGroup>
     <SharePointSiteUrl>http://elektra/websites/appcatalog/</SharePointSiteUrl>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{C1CDDADD-2546-481F-9697-4EA41081F2FC}">
+        <ProjectStore>
+          <AppInstancePackageModifiedTime>2016-01-25T16:34:26.3980881Z</AppInstancePackageModifiedTime>
+          <AppInstanceId>0ebaf882-bcb0-4838-b16b-7f6e82d341b8</AppInstanceId>
+        </ProjectStore>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

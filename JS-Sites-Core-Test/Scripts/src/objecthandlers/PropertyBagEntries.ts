@@ -32,5 +32,30 @@ module Pzl.Sites.Core.ObjectHandlers {
               
             return def.promise();
         }
+
+        ReadObjects(object: Object) {
+            var def = jQuery.Deferred();
+            var clientContext = SP.ClientContext.get_current();
+            var web = clientContext.get_web();
+            var allProperties = web.get_allProperties();
+
+
+            clientContext.load(allProperties);
+            clientContext.executeQueryAsync(
+                () => {
+                    var values = allProperties.get_fieldValues();
+                    for (var key in values) {
+                        Core.Log.Information(this.name, `Getting property '${key}'`);
+                        object[key] = values[key];
+                    }
+                    Core.Log.Information(this.name, `Read of objects ended`);
+                    def.resolve(object);
+                },
+                (sender, args) => {
+                    def.resolve(sender, args);
+                }
+            )
+            return def;
+        }
     } 
 }

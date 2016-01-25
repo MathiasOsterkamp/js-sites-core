@@ -1,4 +1,3 @@
-'use strict';
 /// <reference path="IObjectHandler.ts" />
 var Pzl;
 (function (Pzl) {
@@ -13,6 +12,7 @@ var Pzl;
                         this.name = name;
                     }
                     ObjectHandlerBase.prototype.ProvisionObjects = function (objects, parameters) { };
+                    ObjectHandlerBase.prototype.ReadObjects = function (objects) { };
                     return ObjectHandlerBase;
                 })();
                 Model.ObjectHandlerBase = ObjectHandlerBase;
@@ -44,8 +44,8 @@ var Pzl;
                         }
                         var def = jQuery.Deferred();
                         dependentPromise.done(function () {
-                            return _this.callback(_this.objects, _this.parameters).done(function () {
-                                def.resolve();
+                            return _this.callback(_this.objects, _this.parameters).done(function (result) {
+                                def.resolve(result);
                             });
                         });
                         return def.promise();
@@ -984,6 +984,33 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    LocalNavigation.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        Core.Log.Information(this.name, "Starting reading of objects");
+                        var navigation = web.get_navigation();
+                        var quickLaunchNodeCollection = navigation.get_quickLaunch();
+                        clientContext.load(navigation);
+                        clientContext.load(quickLaunchNodeCollection);
+                        clientContext.executeQueryAsync(function () {
+                            Core.Log.Information(_this.name, "reading existing navigation nodes");
+                            //var index = quickLaunchNodeCollection.get_count() - 1;
+                            //while (index >= 0) {
+                            //    const oldNode = quickLaunchNodeCollection.itemAt(index);
+                            //    objects.push({ "Url": oldNode.get_url(), "Title": oldNode.get_title() });
+                            //    index--;
+                            //}
+                            Core.Log.Information(_this.name, "reading of objects ended");
+                            def.resolve(objects);
+                        }, function (sender, args) {
+                            Core.Log.Information(_this.name, "Provisioning of objects failed");
+                            Core.Log.Error(_this.name, "" + args.get_message());
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
                     return LocalNavigation;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.LocalNavigation = LocalNavigation;
@@ -1056,6 +1083,19 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    Pages.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var promises = [];
+                        //TODO
+                        jQuery.when.apply(jQuery, promises).done(function () {
+                            Core.Log.Information(_this.name, "Code execution scope ended");
+                            def.resolve();
+                        });
+                        return def.promise();
+                    };
                     return Pages;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.Pages = Pages;
@@ -1098,6 +1138,26 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    PropertyBagEntries.prototype.ReadObjects = function (object) {
+                        var _this = this;
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        var allProperties = web.get_allProperties();
+                        clientContext.load(allProperties);
+                        clientContext.executeQueryAsync(function () {
+                            var values = allProperties.get_fieldValues();
+                            for (var key in values) {
+                                Core.Log.Information(_this.name, "Getting property '" + key + "'");
+                                object[key] = values[key];
+                            }
+                            Core.Log.Information(_this.name, "Read of objects ended");
+                            def.resolve(object);
+                        }, function (sender, args) {
+                            def.resolve(sender, args);
+                        });
+                        return def;
+                    };
                     return PropertyBagEntries;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.PropertyBagEntries = PropertyBagEntries;
@@ -1134,6 +1194,19 @@ var Pzl;
                         clientContext.load(web);
                         clientContext.executeQueryAsync(function () {
                             def.resolve();
+                        }, function (sender, args) {
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
+                    WebSettings.prototype.ReadObjects = function (object) {
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        var folder = web.get_rootFolder();
+                        clientContext.load(folder);
+                        clientContext.executeQueryAsync(function () {
+                            def.resolve({ "WelcomePage": folder.get_welcomePage() });
                         }, function (sender, args) {
                             def.resolve(sender, args);
                         });
@@ -1190,8 +1263,12 @@ var Pzl;
                     }
                     this.array.push(logMsg);
                 };
+                Logger.prototype.toString = function () {
+                    return this.array.join("\n");
+                };
                 Logger.prototype.SaveToFile = function () {
                     var def = jQuery.Deferred();
+                    console.log(this.array);
                     if (!this.loggingOptions || !this.loggingOptions.LoggingFolder) {
                         def.resolve();
                         return def.promise();
@@ -1240,6 +1317,11 @@ var Pzl;
         var Core;
         (function (Core) {
             var startTime = null;
+            var ObjectHandlerMethods;
+            (function (ObjectHandlerMethods) {
+                ObjectHandlerMethods[ObjectHandlerMethods["ProvisionObjects"] = 0] = "ProvisionObjects";
+                ObjectHandlerMethods[ObjectHandlerMethods["ReadObjects"] = 1] = "ReadObjects";
+            })(ObjectHandlerMethods || (ObjectHandlerMethods = {}));
             var setupWebDialog;
             function ShowWaitMessage(header, content, height, width) {
                 setupWebDialog = SP.UI.ModalDialog.showWaitScreenWithNoClose(header, content, height, width);
@@ -1247,7 +1329,7 @@ var Pzl;
             function getSetupQueue(json) {
                 return Object.keys(json);
             }
-            function start(json, queue) {
+            function start(json, queue, method) {
                 var def = jQuery.Deferred();
                 startTime = new Date().getTime();
                 Core.Log.Information("Provisioning", "Starting at URL '" + _spPageContextInfo.webServerRelativeUrl + "'");
@@ -1255,8 +1337,10 @@ var Pzl;
                 queue.forEach(function (q, index) {
                     if (!Core.ObjectHandlers[q])
                         return;
-                    queueItems.push(new Core.Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new Core.ObjectHandlers[q]().ProvisionObjects));
+                    var methodname = ObjectHandlerMethods[method];
+                    queueItems.push(new Core.Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new Core.ObjectHandlers[q]()[methodname]));
                 });
+                var results = [];
                 var promises = [];
                 promises.push(jQuery.Deferred());
                 promises[0].resolve();
@@ -1265,11 +1349,18 @@ var Pzl;
                 while (queueItems[index - 1] != undefined) {
                     var i = promises.length - 1;
                     promises.push(queueItems[index - 1].execute(promises[i]));
+                    results[queueItems[index - 1].name] = null;
                     index++;
                 }
                 ;
-                jQuery.when.apply(jQuery, promises).done(function () {
-                    def.resolve();
+                jQuery.when.apply(jQuery, promises).then(function () {
+                    var args = arguments;
+                    var n = 1;
+                    for (var i in results) {
+                        results[i] = args[n];
+                        n++;
+                    }
+                    def.resolve(results);
                 });
                 return def.promise();
             }
@@ -1278,7 +1369,7 @@ var Pzl;
                 ShowWaitMessage("Applying template", "This might take a moment..", 130, 600);
                 Core.Log = new Core.Logger(loggingOptions);
                 var queue = getSetupQueue(template);
-                start(template, queue).then(function () {
+                start(template, queue, ObjectHandlerMethods.ProvisionObjects).then(function () {
                     var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
                     Core.Log.Information("Provisioning", "All done in " + provisioningTime + " seconds");
                     Core.Log.SaveToFile().then(function () {
@@ -1289,7 +1380,44 @@ var Pzl;
                 return def.promise();
             }
             Core.init = init;
+            function read(template, loggingOptions) {
+                var def = jQuery.Deferred();
+                ShowWaitMessage("Reading template", "This might take a moment..", 130, 600);
+                Core.Log = new Core.Logger(loggingOptions);
+                var queue = getSetupQueue(template);
+                start(template, queue, ObjectHandlerMethods.ReadObjects).then(function (generated) {
+                    var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
+                    Core.Log.Information("Reading", "All done in " + provisioningTime + " seconds");
+                    Core.Log.SaveToFile().then(function () {
+                        setupWebDialog.close(null);
+                        console.log(generated);
+                        def.resolve();
+                    });
+                });
+                return def;
+            }
+            Core.read = read;
         })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Test;
+        (function (Test) {
+            var logging = { "On": true };
+            SP.SOD.executeFunc('sp.js', 'SP.ClientContext', function () {
+                var template = {
+                    "PropertyBagEntries": {},
+                    "WebSettings": {},
+                    "LocalNavigation": {}
+                };
+                Pzl.Sites.Core.read(template, logging).done(function () {
+                    alert('ready');
+                });
+            });
+        })(Test = Sites.Test || (Sites.Test = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
 //# sourceMappingURL=js-site.core.js.map
