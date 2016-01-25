@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <Module Name="Scripts">
+    <File Path="Scripts\App.ts" Url="Scripts/App.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\jquery-1.9.1.min.map" Url="Scripts/jquery-1.9.1.min.map" ReplaceContent="TRUE" />
+    <File Path="Scripts\jquery-1.9.1.min.js" Url="Scripts/jquery-1.9.1.min.js" ReplaceContent="TRUE" />
+    <File Path="Scripts\jquery-1.9.1.js" Url="Scripts/jquery-1.9.1.js" ReplaceContent="TRUE" />
+    <File Path="Scripts\jquery-1.9.1.intellisense.js" Url="Scripts/jquery-1.9.1.intellisense.js" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\model\ILoggingOptions.ts" Url="Scripts/src/model/ILoggingOptions.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\model\IObjectHandler.ts" Url="Scripts/src/model/IObjectHandler.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\model\ObjectHandlerBase.ts" Url="Scripts/src/model/ObjectHandlerBase.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\model\TemplateQueueItem.ts" Url="Scripts/src/model/TemplateQueueItem.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\ComposedLook.ts" Url="Scripts/src/objecthandlers/ComposedLook.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\CustomActions.ts" Url="Scripts/src/objecthandlers/CustomActions.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Files.ts" Url="Scripts/src/objecthandlers/Files.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Lists.ts" Url="Scripts/src/objecthandlers/Lists.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\LocalNavigation.ts" Url="Scripts/src/objecthandlers/LocalNavigation.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Pages.ts" Url="Scripts/src/objecthandlers/Pages.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\PropertyBagEntries.ts" Url="Scripts/src/objecthandlers/PropertyBagEntries.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\WebSettings.ts" Url="Scripts/src/objecthandlers/WebSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\HiddenView.ts" Url="Scripts/src/schema/HiddenView.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IComposedLook.ts" Url="Scripts/src/schema/IComposedLook.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IContents.ts" Url="Scripts/src/schema/IContents.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IContentType.ts" Url="Scripts/src/schema/IContentType.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IContentTypeBinding.ts" Url="Scripts/src/schema/IContentTypeBinding.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ICustomAction.ts" Url="Scripts/src/schema/ICustomAction.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IFeature.ts" Url="Scripts/src/schema/IFeature.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IField.ts" Url="Scripts/src/schema/IField.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IFile.ts" Url="Scripts/src/schema/IFile.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IFolder.ts" Url="Scripts/src/schema/IFolder.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IListInstance.ts" Url="Scripts/src/schema/IListInstance.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\INavigationNode.ts" Url="Scripts/src/schema/INavigationNode.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IPage.ts" Url="Scripts/src/schema/IPage.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IRoleAssignment.ts" Url="Scripts/src/schema/IRoleAssignment.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IRoleDefinition.ts" Url="Scripts/src/schema/IRoleDefinition.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ISecurity.ts" Url="Scripts/src/schema/ISecurity.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ISiteSchema.ts" Url="Scripts/src/schema/ISiteSchema.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IView.ts" Url="Scripts/src/schema/IView.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IWebPart.ts" Url="Scripts/src/schema/IWebPart.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IWebSettings.ts" Url="Scripts/src/schema/IWebSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\utilities\Logger.ts" Url="Scripts/src/utilities/Logger.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\pzl.sites.core.ts" Url="Scripts/src/pzl.sites.core.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\typings\jquery\jquery.d.ts" Url="Scripts/typings/jquery/jquery.d.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\typings\microsoft-ajax\microsoft.ajax.d.ts" Url="Scripts/typings/microsoft-ajax/microsoft.ajax.d.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\typings\sharepoint\SharePoint.d.ts" Url="Scripts/typings/sharepoint/SharePoint.d.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\typings\tsd.d.ts" Url="Scripts/typings/tsd.d.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\js-site.core.js" Url="Scripts/js-site.core.js" ReplaceContent="TRUE" />
+    <File Path="Scripts\js-site.core.js.map" Url="Scripts/js-site.core.js.map" ReplaceContent="TRUE" />
+  </Module>
+</Elements>

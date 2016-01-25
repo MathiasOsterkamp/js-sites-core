@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.Module" DefaultFile="Elements.xml" SupportedTrustLevels="All" SupportedDeploymentScopes="Web, Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="Scripts\" Type="ElementManifest" />
+    <ProjectItemFile Source="App.ts" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="jquery-1.9.1.min.map" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="jquery-1.9.1.min.js" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="jquery-1.9.1.js" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="jquery-1.9.1.intellisense.js" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="src\model\ILoggingOptions.ts" Target="Scripts\src\model\" Type="ElementFile" />
+    <ProjectItemFile Source="src\model\IObjectHandler.ts" Target="Scripts\src\model\" Type="ElementFile" />
+    <ProjectItemFile Source="src\model\ObjectHandlerBase.ts" Target="Scripts\src\model\" Type="ElementFile" />
+    <ProjectItemFile Source="src\model\TemplateQueueItem.ts" Target="Scripts\src\model\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\ComposedLook.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\CustomActions.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Files.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Lists.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\LocalNavigation.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Pages.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\PropertyBagEntries.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\WebSettings.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\HiddenView.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IComposedLook.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IContents.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IContentType.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IContentTypeBinding.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ICustomAction.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IFeature.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IField.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IFile.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IFolder.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IListInstance.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\INavigationNode.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IPage.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IRoleAssignment.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IRoleDefinition.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ISecurity.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ISiteSchema.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IView.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IWebPart.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IWebSettings.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\utilities\Logger.ts" Target="Scripts\src\utilities\" Type="ElementFile" />
+    <ProjectItemFile Source="src\pzl.sites.core.ts" Target="Scripts\src\" Type="ElementFile" />
+    <ProjectItemFile Source="typings\jquery\jquery.d.ts" Target="Scripts\typings\jquery\" Type="ElementFile" />
+    <ProjectItemFile Source="typings\microsoft-ajax\microsoft.ajax.d.ts" Target="Scripts\typings\microsoft-ajax\" Type="ElementFile" />
+    <ProjectItemFile Source="typings\sharepoint\SharePoint.d.ts" Target="Scripts\typings\sharepoint\" Type="ElementFile" />
+    <ProjectItemFile Source="typings\tsd.d.ts" Target="Scripts\typings\" Type="ElementFile" />
+    <ProjectItemFile Source="js-site.core.js" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="js-site.core.js.map" Target="Scripts\" Type="ElementFile" />
+  </Files>
+</ProjectItem>

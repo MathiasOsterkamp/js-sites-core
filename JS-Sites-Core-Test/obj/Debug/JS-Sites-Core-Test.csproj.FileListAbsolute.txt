@@ -1,0 +1,3 @@
+C:\temp\js-sites-core\JS-Sites-Core-Test\bin\Debug\JS-Sites-Core-Test.pdb
+C:\temp\js-sites-core\JS-Sites-Core-Test\obj\Debug\JS-Sites-Core-Test.dll
+C:\temp\js-sites-core\JS-Sites-Core-Test\obj\Debug\JS-Sites-Core-Test.pdb
