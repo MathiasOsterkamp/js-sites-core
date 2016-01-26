@@ -9,4 +9,12 @@ module Pzl.Sites.Core.Schema {
         Column: number;
         Contents: IContents;
     }
+    export class WebPart implements IWebPart {
+        Title: string;
+        Order: number;
+        Zone: string;
+        Row: number;
+        Column: number;
+        Contents: IContents;
+    }
 }

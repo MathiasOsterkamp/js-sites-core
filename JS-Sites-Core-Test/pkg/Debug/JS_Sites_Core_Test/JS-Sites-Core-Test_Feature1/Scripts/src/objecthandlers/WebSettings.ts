@@ -28,6 +28,25 @@ module Pzl.Sites.Core.ObjectHandlers {
             )
             
             return def.promise();
-        }
+       }
+      ReadObjects(object: Object) {
+          var def = jQuery.Deferred();
+          var clientContext = SP.ClientContext.get_current();
+          var web = clientContext.get_web();
+         
+          var folder = web.get_rootFolder();
+          clientContext.load(folder);
+          clientContext.executeQueryAsync(
+              () => {
+                  
+                  def.resolve({ "WelcomePage": folder.get_welcomePage()});
+              },
+              (sender, args) => {
+                  def.resolve(sender, args);
+              }
+          )
+
+          return def.promise();
+      }
     } 
 }

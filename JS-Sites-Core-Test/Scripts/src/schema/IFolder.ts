@@ -3,4 +3,8 @@ module Pzl.Sites.Core.Schema {
         Name : string;
         DefaultValues: Object; 
     }
+    export class Folder implements IFolder {
+        Name: string;
+        DefaultValues: Object;
+    }
 }

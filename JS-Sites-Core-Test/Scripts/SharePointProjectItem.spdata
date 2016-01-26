@@ -19,7 +19,7 @@
     <ProjectItemFile Source="src\objecthandlers\Pages.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
     <ProjectItemFile Source="src\objecthandlers\PropertyBagEntries.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
     <ProjectItemFile Source="src\objecthandlers\WebSettings.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
-    <ProjectItemFile Source="src\schema\HiddenView.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IHiddenView.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IComposedLook.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IContents.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IContentType.ts" Target="Scripts\src\schema\" Type="ElementFile" />
@@ -35,7 +35,7 @@
     <ProjectItemFile Source="src\schema\IRoleAssignment.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IRoleDefinition.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\ISecurity.ts" Target="Scripts\src\schema\" Type="ElementFile" />
-    <ProjectItemFile Source="src\schema\ISiteSchema.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IProvisioning.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IView.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IWebPart.ts" Target="Scripts\src\schema\" Type="ElementFile" />
     <ProjectItemFile Source="src\schema\IWebSettings.ts" Target="Scripts\src\schema\" Type="ElementFile" />
@@ -46,5 +46,42 @@
     <ProjectItemFile Source="typings\sharepoint\SharePoint.d.ts" Target="Scripts\typings\sharepoint\" Type="ElementFile" />
     <ProjectItemFile Source="typings\tsd.d.ts" Target="Scripts\typings\" Type="ElementFile" />
     <ProjectItemFile Source="js-site.core.js" Target="Scripts\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IProvisioningTemplate.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IRegionalSettings.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ISupportedUILanguages.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IAuditSettings.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IUser.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ISiteGroup.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IPermissions.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IListInstanceFieldRef.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IBreakRoleInheritance.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IObjectSecurity.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IWorkflows.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IWebTemplate.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IPublishing.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IDesignPackage.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IPageLayout.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IAddin.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ITermGroup.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ITermSet.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ITerm.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IAudit.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\ICustomActions.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IFeatures.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IWorkflowSubscription.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IWorkflowDefinition.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\SitePolicy.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\RegionalSettings.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\SupportedUILanguages.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\AuditSettings.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\ContentTypes.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\SiteFields.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Security.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Features.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\SearchSettings.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Workflows.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\TermGroups.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\Publishing.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\objecthandlers\AddIns.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
   </Files>
 </ProjectItem>

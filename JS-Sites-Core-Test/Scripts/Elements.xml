@@ -18,7 +18,7 @@
     <File Path="Scripts\src\objecthandlers\Pages.ts" Url="Scripts/src/objecthandlers/Pages.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\objecthandlers\PropertyBagEntries.ts" Url="Scripts/src/objecthandlers/PropertyBagEntries.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\objecthandlers\WebSettings.ts" Url="Scripts/src/objecthandlers/WebSettings.ts" ReplaceContent="TRUE" />
-    <File Path="Scripts\src\schema\HiddenView.ts" Url="Scripts/src/schema/HiddenView.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IHiddenView.ts" Url="Scripts/src/schema/IHiddenView.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IComposedLook.ts" Url="Scripts/src/schema/IComposedLook.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IContents.ts" Url="Scripts/src/schema/IContents.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IContentType.ts" Url="Scripts/src/schema/IContentType.ts" ReplaceContent="TRUE" />
@@ -34,7 +34,7 @@
     <File Path="Scripts\src\schema\IRoleAssignment.ts" Url="Scripts/src/schema/IRoleAssignment.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IRoleDefinition.ts" Url="Scripts/src/schema/IRoleDefinition.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\ISecurity.ts" Url="Scripts/src/schema/ISecurity.ts" ReplaceContent="TRUE" />
-    <File Path="Scripts\src\schema\ISiteSchema.ts" Url="Scripts/src/schema/ISiteSchema.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IProvisioning.ts" Url="Scripts/src/schema/IProvisioning.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IView.ts" Url="Scripts/src/schema/IView.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IWebPart.ts" Url="Scripts/src/schema/IWebPart.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\schema\IWebSettings.ts" Url="Scripts/src/schema/IWebSettings.ts" ReplaceContent="TRUE" />
@@ -45,5 +45,42 @@
     <File Path="Scripts\typings\sharepoint\SharePoint.d.ts" Url="Scripts/typings/sharepoint/SharePoint.d.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\typings\tsd.d.ts" Url="Scripts/typings/tsd.d.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\js-site.core.js" Url="Scripts/js-site.core.js" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IProvisioningTemplate.ts" Url="Scripts/src/schema/IProvisioningTemplate.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IRegionalSettings.ts" Url="Scripts/src/schema/IRegionalSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ISupportedUILanguages.ts" Url="Scripts/src/schema/ISupportedUILanguages.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IAuditSettings.ts" Url="Scripts/src/schema/IAuditSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IUser.ts" Url="Scripts/src/schema/IUser.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ISiteGroup.ts" Url="Scripts/src/schema/ISiteGroup.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IPermissions.ts" Url="Scripts/src/schema/IPermissions.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IListInstanceFieldRef.ts" Url="Scripts/src/schema/IListInstanceFieldRef.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IBreakRoleInheritance.ts" Url="Scripts/src/schema/IBreakRoleInheritance.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IObjectSecurity.ts" Url="Scripts/src/schema/IObjectSecurity.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IWorkflows.ts" Url="Scripts/src/schema/IWorkflows.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IWebTemplate.ts" Url="Scripts/src/schema/IWebTemplate.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IPublishing.ts" Url="Scripts/src/schema/IPublishing.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IDesignPackage.ts" Url="Scripts/src/schema/IDesignPackage.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IPageLayout.ts" Url="Scripts/src/schema/IPageLayout.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IAddin.ts" Url="Scripts/src/schema/IAddin.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ITermGroup.ts" Url="Scripts/src/schema/ITermGroup.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ITermSet.ts" Url="Scripts/src/schema/ITermSet.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ITerm.ts" Url="Scripts/src/schema/ITerm.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IAudit.ts" Url="Scripts/src/schema/IAudit.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\ICustomActions.ts" Url="Scripts/src/schema/ICustomActions.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IFeatures.ts" Url="Scripts/src/schema/IFeatures.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IWorkflowSubscription.ts" Url="Scripts/src/schema/IWorkflowSubscription.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IWorkflowDefinition.ts" Url="Scripts/src/schema/IWorkflowDefinition.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\SitePolicy.ts" Url="Scripts/src/objecthandlers/SitePolicy.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\RegionalSettings.ts" Url="Scripts/src/objecthandlers/RegionalSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\SupportedUILanguages.ts" Url="Scripts/src/objecthandlers/SupportedUILanguages.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\AuditSettings.ts" Url="Scripts/src/objecthandlers/AuditSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\ContentTypes.ts" Url="Scripts/src/objecthandlers/ContentTypes.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\SiteFields.ts" Url="Scripts/src/objecthandlers/SiteFields.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Security.ts" Url="Scripts/src/objecthandlers/Security.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Features.ts" Url="Scripts/src/objecthandlers/Features.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\SearchSettings.ts" Url="Scripts/src/objecthandlers/SearchSettings.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Workflows.ts" Url="Scripts/src/objecthandlers/Workflows.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\TermGroups.ts" Url="Scripts/src/objecthandlers/TermGroups.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\Publishing.ts" Url="Scripts/src/objecthandlers/Publishing.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\objecthandlers\AddIns.ts" Url="Scripts/src/objecthandlers/AddIns.ts" ReplaceContent="TRUE" />
   </Module>
 </Elements>

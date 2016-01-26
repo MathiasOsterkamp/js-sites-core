@@ -3,4 +3,8 @@ module Pzl.Sites.Core.Schema {
         Xml: string;
         FileUrl: string;
     }
+    export class Contents implements IContents {
+        Xml: string;
+        FileUrl: string;
+    }
 }

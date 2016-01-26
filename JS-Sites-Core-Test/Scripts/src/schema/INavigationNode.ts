@@ -3,4 +3,8 @@ module Pzl.Sites.Core.Schema {
         Title: string;
         Url: string;
     }
+    export class NavigationNode implements INavigationNode {
+        Title: string;
+        Url: string;
+    }
 }

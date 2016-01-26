@@ -72,5 +72,43 @@ module Pzl.Sites.Core.ObjectHandlers {
                 
             return def.promise();
         }
+        ReadObjects(objects: Array<Schema.ICustomAction>) {
+            var def = jQuery.Deferred();
+
+            Core.Log.Information(this.name, `Starting provisioning of objects`);
+
+            var clientContext = SP.ClientContext.get_current();
+            var userCustomActions = clientContext.get_web().get_userCustomActions();
+            var usercustomActionInstances: Array<SP.UserCustomAction> = [];
+            var actions = [];
+            clientContext.load(userCustomActions);
+            clientContext.executeQueryAsync(
+                () => {
+                    var listEnumerator = userCustomActions.getEnumerator();
+                    var i = 0;
+                    while (listEnumerator.moveNext()) {
+                        var action = listEnumerator.get_current();
+                        usercustomActionInstances[i] = action;
+                        var ac = {
+                            "Location": action.get_location(),
+                            "Seqeuence": action.get_sequence(),
+                            "ScriptSrc": action.get_scriptSrc(),
+                            "Name": action.get_name(),
+                            "Title": action.get_title()
+                        };
+                        actions.push(ac);
+                        i++;
+                    }
+                   
+                    def.resolve(actions);
+                },
+                (sender, args) => {
+                    Core.Log.Information(this.name, `Provisioning of objects failed`)
+                    Core.Log.Error(this.name, `${args.get_message()}`)
+                    def.resolve(sender, args);
+                });
+
+            return def.promise();
+        }
     } 
 }

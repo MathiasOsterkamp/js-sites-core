@@ -3,4 +3,9 @@ module Pzl.Sites.Core.Schema {
        ContentTypeId: string;
        Default: Boolean;
     }
+
+    export class ContentTypeBinding implements IContentTypeBinding {
+        ContentTypeId: string;
+        Default: Boolean;
+    }
 }

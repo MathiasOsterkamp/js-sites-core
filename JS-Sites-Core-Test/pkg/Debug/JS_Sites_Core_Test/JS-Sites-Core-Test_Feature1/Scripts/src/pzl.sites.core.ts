@@ -36,24 +36,33 @@ module Pzl.Sites.Core {
         
         var queueItems : Array<Model.TemplateQueueItem> = [];
         queue.forEach((q, index) => {
-            if(!ObjectHandlers[q]) return;
-            queueItems.push(new Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new ObjectHandlers[q]()[method]));
+            if (!ObjectHandlers[q]) return;
+            var methodname = ObjectHandlerMethods[method];
+            queueItems.push(new Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new ObjectHandlers[q]()[methodname]));
         });        
-        
+        var results = [];
         var promises = [];
         promises.push(jQuery.Deferred());
         promises[0].resolve();
         promises[0].promise();
-        
+       
         var index = 1;
         while (queueItems[index-1] != undefined) {
             var i = promises.length - 1;
-            promises.push(queueItems[index-1].execute(promises[i]));
+            promises.push(queueItems[index - 1].execute(promises[i]));
+           
+            results[queueItems[index - 1].name] = null;
             index++;
         };
         
-        jQuery.when.apply(jQuery, promises).done(() => {
-            def.resolve();
+        jQuery.when.apply(jQuery, promises).then(function() {
+            var args = arguments;
+            var n = 1;
+            for (var i in  results) {
+                results[i] = <any>args[n];
+                n++;
+            }
+            def.resolve(results);
         });
         
         return def.promise();   
@@ -75,19 +84,20 @@ module Pzl.Sites.Core {
         
         return def.promise();   
     }
-    export function read(loggingOptions: Model.ILoggingOptions): JQueryDeferred<Schema.SiteSchema>{
+    export function read(template: Schema.SiteSchema,loggingOptions: Model.ILoggingOptions): JQueryDeferred<Schema.SiteSchema>{
 
-        var template = <Schema.SiteSchema> {"PropertyBagEntries": {}};
+      
         var def = jQuery.Deferred();
         ShowWaitMessage("Reading template", "This might take a moment..", 130, 600);
 
         Log = new Logger(loggingOptions);
         var queue = getSetupQueue(template);
-        start(template, queue, ObjectHandlerMethods.ReadObjects).then(() => {
+        start(template, queue, ObjectHandlerMethods.ReadObjects).then((generated) => {
             var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
             Log.Information("Reading", `All done in ${provisioningTime} seconds`);
             Log.SaveToFile().then(() => {
                 setupWebDialog.close(null);
+                console.log(generated);
                 def.resolve();
             });
         });

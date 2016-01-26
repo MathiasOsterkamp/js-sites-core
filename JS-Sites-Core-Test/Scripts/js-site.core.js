@@ -57,6 +57,24 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ComposedLook = (function () {
+                    function ComposedLook() {
+                    }
+                    return ComposedLook;
+                })();
+                Schema.ComposedLook = ComposedLook;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\IComposedLook.ts" />
@@ -65,6 +83,94 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var AddIns = (function (_super) {
+                    __extends(AddIns, _super);
+                    function AddIns() {
+                        _super.call(this, "AddIns");
+                    }
+                    AddIns.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    AddIns.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return AddIns;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.AddIns = AddIns;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var AuditSettings = (function () {
+                    function AuditSettings() {
+                    }
+                    return AuditSettings;
+                })();
+                Schema.AuditSettings = AuditSettings;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IAuditSettings.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var AuditSettings = (function (_super) {
+                    __extends(AuditSettings, _super);
+                    function AuditSettings() {
+                        _super.call(this, "AuditSettings");
+                    }
+                    AuditSettings.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    AuditSettings.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return AuditSettings;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.AuditSettings = AuditSettings;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
 var Pzl;
 (function (Pzl) {
     var Sites;
@@ -88,15 +194,37 @@ var Pzl;
                     function ComposedLook() {
                         _super.call(this, "ComposedLook");
                     }
+                    ComposedLook.prototype.ReadObjects = function (object) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        var theme = web.get_themeInfo();
+                        clientContext.load(theme);
+                        clientContext.executeQueryAsync(function () {
+                            Core.Log.Information(_this.name, "Code execution scope ended");
+                            def.resolve({
+                                "ColorPaletteUrl": "",
+                                "FontSchemeUrl": "",
+                                "BackgroundImageUrl": theme.get_themeBackgroundImageUri()
+                            });
+                        }, function (sender, args) {
+                            Core.Log.Information(_this.name, "Code execution scope ended");
+                            Core.Log.Information(_this.name, args.get_message());
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
                     ComposedLook.prototype.ProvisionObjects = function (object) {
                         var _this = this;
                         Core.Log.Information(this.name, "Code execution scope started");
                         var def = jQuery.Deferred();
                         var clientContext = SP.ClientContext.get_current();
                         var web = clientContext.get_web();
-                        var colorPaletteUrl = object.ColorPaletteUrl ? Helpers.GetUrlWithoutTokens(object.ColorPaletteUrl) : "";
-                        var fontSchemeUrl = object.FontSchemeUrl ? Helpers.GetUrlWithoutTokens(object.FontSchemeUrl) : "";
-                        var backgroundImageUrl = object.BackgroundImageUrl ? Helpers.GetUrlWithoutTokens(object.BackgroundImageUrl) : null;
+                        var colorPaletteUrl = object.ColorFile ? Helpers.GetUrlWithoutTokens(object.ColorFile) : "";
+                        var fontSchemeUrl = object.FontFile ? Helpers.GetUrlWithoutTokens(object.FontFile) : "";
+                        var backgroundImageUrl = object.BackgroundFile ? Helpers.GetUrlWithoutTokens(object.BackgroundFile) : null;
                         web.applyTheme(colorPaletteUrl, fontSchemeUrl, backgroundImageUrl, true);
                         web.update();
                         clientContext.executeQueryAsync(function () {
@@ -116,7 +244,96 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var ContentTypes = (function (_super) {
+                    __extends(ContentTypes, _super);
+                    function ContentTypes() {
+                        _super.call(this, "ContentTypes");
+                    }
+                    ContentTypes.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    ContentTypes.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return ContentTypes;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.ContentTypes = ContentTypes;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var CustomAction = (function () {
+                    function CustomAction() {
+                    }
+                    return CustomAction;
+                })();
+                Schema.CustomAction = CustomAction;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Contents = (function () {
+                    function Contents() {
+                    }
+                    return Contents;
+                })();
+                Schema.Contents = Contents;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="IContents.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var WebPart = (function () {
+                    function WebPart() {
+                    }
+                    return WebPart;
+                })();
+                Schema.WebPart = WebPart;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\ICustomAction.ts" />
@@ -217,6 +434,39 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    CustomActions.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        var def = jQuery.Deferred();
+                        Core.Log.Information(this.name, "Starting provisioning of objects");
+                        var clientContext = SP.ClientContext.get_current();
+                        var userCustomActions = clientContext.get_web().get_userCustomActions();
+                        var usercustomActionInstances = [];
+                        var actions = [];
+                        clientContext.load(userCustomActions);
+                        clientContext.executeQueryAsync(function () {
+                            var listEnumerator = userCustomActions.getEnumerator();
+                            var i = 0;
+                            while (listEnumerator.moveNext()) {
+                                var action = listEnumerator.get_current();
+                                usercustomActionInstances[i] = action;
+                                var ac = {
+                                    "Location": action.get_location(),
+                                    "Seqeuence": action.get_sequence(),
+                                    "ScriptSrc": action.get_scriptSrc(),
+                                    "Name": action.get_name(),
+                                    "Title": action.get_title()
+                                };
+                                actions.push(ac);
+                                i++;
+                            }
+                            def.resolve(actions);
+                        }, function (sender, args) {
+                            Core.Log.Information(_this.name, "Provisioning of objects failed");
+                            Core.Log.Error(_this.name, "" + args.get_message());
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
                     return CustomActions;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.CustomActions = CustomActions;
@@ -224,8 +474,79 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var Features = (function (_super) {
+                    __extends(Features, _super);
+                    function Features() {
+                        _super.call(this, "Features");
+                    }
+                    Features.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    Features.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return Features;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.Features = Features;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var HiddenView = (function () {
+                    function HiddenView() {
+                    }
+                    return HiddenView;
+                })();
+                Schema.HiddenView = HiddenView;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="IWebPart.ts" />
-/// <reference path="HiddenView.ts" />
+/// <reference path="IHiddenView.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var File = (function () {
+                    function File() {
+                    }
+                    return File;
+                })();
+                Schema.File = File;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\IFile.ts" />
@@ -422,7 +743,7 @@ var Pzl;
                             return;
                         obj.Views.forEach(function (v) {
                             mapping[v.List] = mapping[v.List] || [];
-                            mapping[v.List].push(jQuery.extend(v, { "Url": obj.Dest }));
+                            mapping[v.List].push(jQuery.extend(v, { "Url": obj.Folder }));
                         });
                     });
                     Object.keys(mapping).forEach(function (l, index) {
@@ -490,20 +811,53 @@ var Pzl;
                         var clientContext = SP.ClientContext.get_current();
                         var promises = [];
                         objects.forEach(function (obj) {
-                            AddFileByUrl(obj.Dest, obj.Src, obj.Overwrite);
+                            AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite);
                         });
                         jQuery.when.apply(jQuery, promises).done(function () {
                             var promises = [];
                             objects.forEach(function (obj) {
                                 if (obj.WebParts && obj.WebParts.length > 0) {
-                                    promises.push(AddWebPartsToWebPartPage(obj.Dest, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
+                                    promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
                                 }
                             });
                             jQuery.when.apply(jQuery, promises).done(function () {
                                 var promises = [];
                                 objects.forEach(function (obj) {
                                     if (obj.Properties && Object.keys(obj.Properties).length > 0) {
-                                        promises.push(ApplyFileProperties(obj.Dest, obj.Properties));
+                                        promises.push(ApplyFileProperties(obj.Folder, obj.Properties));
+                                    }
+                                });
+                                jQuery.when.apply(jQuery, promises).done(function () {
+                                    ModifyHiddenViews(objects).then(function () {
+                                        Core.Log.Information(_this.name, "Code execution scope ended");
+                                        def.resolve();
+                                    });
+                                });
+                            });
+                        });
+                        return def.promise();
+                    };
+                    Files.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var promises = [];
+                        objects.forEach(function (obj) {
+                            AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite);
+                        });
+                        jQuery.when.apply(jQuery, promises).done(function () {
+                            var promises = [];
+                            objects.forEach(function (obj) {
+                                if (obj.WebParts && obj.WebParts.length > 0) {
+                                    promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
+                                }
+                            });
+                            jQuery.when.apply(jQuery, promises).done(function () {
+                                var promises = [];
+                                objects.forEach(function (obj) {
+                                    if (obj.Properties && Object.keys(obj.Properties).length > 0) {
+                                        promises.push(ApplyFileProperties(obj.Folder, obj.Properties));
                                     }
                                 });
                                 jQuery.when.apply(jQuery, promises).done(function () {
@@ -523,12 +877,216 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+/*
+
+[
+    {
+      "Dest": "SitePages/Homepage.aspx",
+      "Overwrite": true,
+      "Src": "{resources}/SitePages/Homepage.txt",
+      "RemoveExistingWebParts": true,
+      "Properties": {
+        "ContentTypeId": "0x010109010092214CADC5FC4262A177C632F516412E"
+      },
+      "WebParts": [
+        {
+          "Title": "Image Viewer",
+          "Zone": "LeftColumn",
+          "Order": 0,
+          "Contents": {
+            "Xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?><WebPart xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.microsoft.com/WebPart/v2\"><Title>Image Viewer</Title><FrameType>None</FrameType><Assembly>Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Assembly><TypeName>Microsoft.SharePoint.WebPartPages.ImageWebPart</TypeName><ImageLink xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><AlternativeText xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><VerticalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Middle</VerticalAlignment><HorizontalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Center</HorizontalAlignment><BackgroundColor xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">transparent</BackgroundColor></WebPart>"
+          }
+        },
+        {
+          "Title": "SiteFeed",
+          "Zone": "LeftColumn",
+          "Order": 1,
+          "Contents": {
+            "FileUrl": "{webpartgallery}/SiteFeed.dwp"
+          }
+        },
+        {
+          "Title": "MyWebPart",
+          "Zone": "RightColumn",
+          "Order": 0,
+          "Contents": {
+            "FileUrl": "{resources}/WebParts/MyWebPart.txt"
+          }
+        }
+      ]
+    }
+  ]
+*/ 
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ContentTypeBinding = (function () {
+                    function ContentTypeBinding() {
+                    }
+                    return ContentTypeBinding;
+                })();
+                Schema.ContentTypeBinding = ContentTypeBinding;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Folder = (function () {
+                    function Folder() {
+                    }
+                    return Folder;
+                })();
+                Schema.Folder = Folder;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var RoleDefinition = (function () {
+                    function RoleDefinition() {
+                    }
+                    return RoleDefinition;
+                })();
+                Schema.RoleDefinition = RoleDefinition;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var RoleAssignment = (function () {
+                    function RoleAssignment() {
+                    }
+                    return RoleAssignment;
+                })();
+                Schema.RoleAssignment = RoleAssignment;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var User = (function () {
+                    function User() {
+                    }
+                    return User;
+                })();
+                Schema.User = User;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var SiteGroup = (function () {
+                    function SiteGroup() {
+                    }
+                    return SiteGroup;
+                })();
+                Schema.SiteGroup = SiteGroup;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="IRoleDefinition.ts" />
 /// <reference path="IRoleAssignment.ts" />
+/// <reference path="IUser.ts" />
+/// <reference path="ISiteGroup.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Security = (function () {
+                    function Security() {
+                    }
+                    return Security;
+                })();
+                Schema.Security = Security;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var View = (function () {
+                    function View() {
+                    }
+                    return View;
+                })();
+                Schema.View = View;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="IContentTypeBinding.ts" />
 /// <reference path="IFolder.ts" />
 /// <reference path="ISecurity.ts" />
 /// <reference path="IView.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ListInstance = (function () {
+                    function ListInstance() {
+                    }
+                    return ListInstance;
+                })();
+                Schema.ListInstance = ListInstance;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\IListInstance.ts" />
@@ -658,8 +1216,8 @@ var Pzl;
                         if (!obj.Security)
                             return;
                         if (obj.Security.BreakRoleInheritance) {
-                            Core.Log.Information("Lists Security", "Breaking Role Inheritance for list '" + l.get_title() + "'. CopyRoleAssignments = '" + obj.Security.CopyRoleAssignments + "', ClearSubscopes = '" + obj.Security.ClearSubscopes + "'");
-                            l.breakRoleInheritance(obj.Security.CopyRoleAssignments, obj.Security.ClearSubscopes);
+                            Core.Log.Information("Lists Security", "Breaking Role Inheritance for list '" + l.get_title() + "'. CopyRoleAssignments = '" + obj.Security.BreakRoleInheritance.CopyRoleAssignments + "', ClearSubscopes = '" + obj.Security.BreakRoleInheritance.ClearSubscopes + "'");
+                            l.breakRoleInheritance(obj.Security.BreakRoleInheritance.CopyRoleAssignments, obj.Security.BreakRoleInheritance.ClearSubscopes);
                             l.update();
                             clientContext.load(l.get_roleAssignments());
                         }
@@ -675,7 +1233,7 @@ var Pzl;
                             var obj = objects[index];
                             if (!obj.Security)
                                 return;
-                            obj.Security.RoleAssignments.forEach(function (ra) {
+                            obj.Security.Permissions.RoleAssignments.forEach(function (ra) {
                                 var roleDef = null;
                                 if (typeof ra.RoleDefinition == "number") {
                                     roleDef = roleDefinitions.getById(ra.RoleDefinition);
@@ -895,10 +1453,123 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    Lists.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var listobjects = [];
+                        var clientContext = SP.ClientContext.get_current();
+                        var lists = clientContext.get_web().get_lists();
+                        var listInstances = [];
+                        clientContext.load(lists);
+                        clientContext.executeQueryAsync(function () {
+                            var listEnumerator = lists.getEnumerator();
+                            var i = 0;
+                            while (listEnumerator.moveNext()) {
+                                listInstances[i] = listEnumerator.get_current();
+                                var list = {
+                                    "Title": listInstances[i].get_title(),
+                                    "Url": "",
+                                    "TemplateType": listInstances[i].get_baseType(),
+                                    "Security": {},
+                                    "Folders": [],
+                                    "ContentTypeBindings": []
+                                };
+                                listobjects.push(list);
+                                clientContext.load(listInstances[i].get_contentTypes());
+                                clientContext.load(listInstances[i].get_views());
+                                clientContext.load(listInstances[i].get_roleAssignments());
+                                clientContext.load(listInstances[i].get_rootFolder().get_folders());
+                                clientContext.load(listInstances[i].get_contentTypes());
+                                i++;
+                            }
+                            if (!clientContext.get_hasPendingRequest()) {
+                                Core.Log.Information(_this.name, "Code execution scope ended");
+                                def.resolve(listobjects);
+                                return def.promise();
+                            }
+                            clientContext.executeQueryAsync(function () {
+                                def.resolve(listobjects);
+                            }, function (sender, args) {
+                                Core.Log.Error(_this.name, "Error: " + args.get_message());
+                                Core.Log.Information(_this.name, "Code execution scope ended");
+                                def.resolve(sender, args);
+                            });
+                        }, function (sender, args) {
+                            Core.Log.Error(_this.name, "Error: " + args.get_message());
+                            Core.Log.Information(_this.name, "Provisioning of objects failed");
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
                     return Lists;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.Lists = Lists;
             })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/*
+"Lists": [
+    {
+      "Title": "Internal Documents",
+      "Url": "InternalDocuments",
+      "TemplateType": 101,
+      "Security": {
+        "BreakRoleInheritance": true,
+        "CopyRoleAssignments": true,
+        "ClearSubscopes": true,
+        "RoleAssignments": [
+          {
+            "Principal": "{associatevisitorgroup}",
+            "RoleDefinition": 1073741826
+          },
+          {
+            "Principal": "{associatemembergroup}",
+            "RoleDefinition": "Contribute"
+          },
+          {
+            "Principal": "{associateownergroup}",
+            "RoleDefinition": "Full Control"
+          }
+        ]
+      },
+      "Folders": [
+        {
+          "Name": "Agenda",
+          "DefaultValues": {
+            "PortDocumentCategory": "-1;#Agenda|bdbd7af3-45ea-4993-a243-be91c0e5a6a8"
+          }
+        },
+        {
+          "Name": "Agreements",
+          "DefaultValues": {
+            "PortDocumentCategory": "-1;#Agreements|6689b4c-d2d0-43fa-b916-2e7698b8387d"
+          }
+        }
+      ],
+      "ContentTypeBindings": [
+        {
+          "ContentTypeId": "0x010100B3337B3CDC314FF2B8BC5F38977EDBF0"
+        }
+      ]
+    }
+  ],*/ 
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var NavigationNode = (function () {
+                    function NavigationNode() {
+                    }
+                    return NavigationNode;
+                })();
+                Schema.NavigationNode = NavigationNode;
+            })(Schema = Core.Schema || (Core.Schema = {}));
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
@@ -1019,6 +1690,24 @@ var Pzl;
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
 /// <reference path="IWebPart.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Page = (function () {
+                    function Page() {
+                    }
+                    return Page;
+                })();
+                Schema.Page = Page;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\IPage.ts" />
@@ -1167,6 +1856,304 @@ var Pzl;
 })(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var Publishing = (function (_super) {
+                    __extends(Publishing, _super);
+                    function Publishing() {
+                        _super.call(this, "Publishing");
+                    }
+                    Publishing.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    Publishing.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return Publishing;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.Publishing = Publishing;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var RegionalSettings = (function (_super) {
+                    __extends(RegionalSettings, _super);
+                    function RegionalSettings() {
+                        _super.call(this, "RegionalSettings");
+                    }
+                    RegionalSettings.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    RegionalSettings.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return RegionalSettings;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.RegionalSettings = RegionalSettings;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var SearchSettings = (function (_super) {
+                    __extends(SearchSettings, _super);
+                    function SearchSettings() {
+                        _super.call(this, "SearchSettings");
+                    }
+                    SearchSettings.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    SearchSettings.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return SearchSettings;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.SearchSettings = SearchSettings;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var Security = (function (_super) {
+                    __extends(Security, _super);
+                    function Security() {
+                        _super.call(this, "Security");
+                    }
+                    Security.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    Security.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return Security;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.Security = Security;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var SiteFields = (function (_super) {
+                    __extends(SiteFields, _super);
+                    function SiteFields() {
+                        _super.call(this, "SiteFields");
+                    }
+                    SiteFields.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    SiteFields.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return SiteFields;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.SiteFields = SiteFields;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var SitePolicy = (function (_super) {
+                    __extends(SitePolicy, _super);
+                    function SitePolicy() {
+                        _super.call(this, "SitePolicy");
+                    }
+                    SitePolicy.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    SitePolicy.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return SitePolicy;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.SitePolicy = SitePolicy;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var SupportedUILanguages = (function (_super) {
+                    __extends(SupportedUILanguages, _super);
+                    function SupportedUILanguages() {
+                        _super.call(this, "SupportedUILanguages");
+                    }
+                    SupportedUILanguages.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    SupportedUILanguages.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return SupportedUILanguages;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.SupportedUILanguages = SupportedUILanguages;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var TermGroups = (function (_super) {
+                    __extends(TermGroups, _super);
+                    function TermGroups() {
+                        _super.call(this, "TermGroups");
+                    }
+                    TermGroups.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    TermGroups.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return TermGroups;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.TermGroups = TermGroups;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var WebSettings = (function () {
+                    function WebSettings() {
+                    }
+                    return WebSettings;
+                })();
+                Schema.WebSettings = WebSettings;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\IWebSettings.ts" />
 var Pzl;
 (function (Pzl) {
@@ -1219,6 +2206,95 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+/// <reference path="..\..\typings\tsd.d.ts" />
+/// <reference path="..\model\ObjectHandlerBase.ts" />
+/// <reference path="..\schema\IComposedLook.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var ObjectHandlers;
+            (function (ObjectHandlers) {
+                var Workflows = (function (_super) {
+                    __extends(Workflows, _super);
+                    function Workflows() {
+                        _super.call(this, "Workflows");
+                    }
+                    Workflows.prototype.ProvisionObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve();
+                        return def.promise();
+                    };
+                    Workflows.prototype.ReadObjects = function (object) {
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        def.resolve({});
+                        return def.promise();
+                    };
+                    return Workflows;
+                })(Core.Model.ObjectHandlerBase);
+                ObjectHandlers.Workflows = Workflows;
+            })(ObjectHandlers = Core.ObjectHandlers || (Core.ObjectHandlers = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Feature = (function () {
+                    function Feature() {
+                    }
+                    return Feature;
+                })();
+                Schema.Feature = Feature;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Field = (function () {
+                    function Field() {
+                    }
+                    return Field;
+                })();
+                Schema.Field = Field;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ContentType = (function () {
+                    function ContentType() {
+                    }
+                    return ContentType;
+                })();
+                Schema.ContentType = ContentType;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="IListInstance.ts" />
 /// <reference path="IFile.ts" />
 /// <reference path="IPage.ts" />
@@ -1229,6 +2305,24 @@ var Pzl;
 /// <reference path="ICustomAction.ts" />
 /// <reference path="IComposedLook.ts" />
 /// <reference path="IWebSettings.ts" />
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Provisioning = (function () {
+                    function Provisioning() {
+                    }
+                    return Provisioning;
+                })();
+                Schema.Provisioning = Provisioning;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="../model/ILoggingOptions.ts" />
 var Pzl;
@@ -1298,7 +2392,7 @@ var Pzl;
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
 /// <reference path="..\typings\tsd.d.ts" />
-/// <reference path="schema/ISiteSchema.ts" />
+/// <reference path="schema/IProvisioning.ts" />
 /// <reference path="objecthandlers/Lists.ts" />
 /// <reference path="objecthandlers/ComposedLook.ts" />
 /// <reference path="objecthandlers/Files.ts" />
@@ -1369,7 +2463,7 @@ var Pzl;
                 ShowWaitMessage("Applying template", "This might take a moment..", 130, 600);
                 Core.Log = new Core.Logger(loggingOptions);
                 var queue = getSetupQueue(template);
-                start(template, queue, ObjectHandlerMethods.ProvisionObjects).then(function () {
+                start(template.Templates[0], queue, ObjectHandlerMethods.ProvisionObjects).then(function () {
                     var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
                     Core.Log.Information("Provisioning", "All done in " + provisioningTime + " seconds");
                     Core.Log.SaveToFile().then(function () {
@@ -1385,7 +2479,7 @@ var Pzl;
                 ShowWaitMessage("Reading template", "This might take a moment..", 130, 600);
                 Core.Log = new Core.Logger(loggingOptions);
                 var queue = getSetupQueue(template);
-                start(template, queue, ObjectHandlerMethods.ReadObjects).then(function (generated) {
+                start(template.Templates[0], queue, ObjectHandlerMethods.ReadObjects).then(function (generated) {
                     var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
                     Core.Log.Information("Reading", "All done in " + provisioningTime + " seconds");
                     Core.Log.SaveToFile().then(function () {
@@ -1404,17 +2498,398 @@ var Pzl;
 (function (Pzl) {
     var Sites;
     (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Addin = (function () {
+                    function Addin() {
+                    }
+                    return Addin;
+                })();
+                Schema.Addin = Addin;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Audit = (function () {
+                    function Audit() {
+                    }
+                    return Audit;
+                })();
+                Schema.Audit = Audit;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var BreakRoleInheritance = (function () {
+                    function BreakRoleInheritance() {
+                    }
+                    return BreakRoleInheritance;
+                })();
+                Schema.BreakRoleInheritance = BreakRoleInheritance;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var CustomActions = (function () {
+                    function CustomActions() {
+                    }
+                    return CustomActions;
+                })();
+                Schema.CustomActions = CustomActions;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var DesignPackage = (function () {
+                    function DesignPackage() {
+                    }
+                    return DesignPackage;
+                })();
+                Schema.DesignPackage = DesignPackage;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Features = (function () {
+                    function Features() {
+                    }
+                    return Features;
+                })();
+                Schema.Features = Features;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ListInstanceFieldRef = (function () {
+                    function ListInstanceFieldRef() {
+                    }
+                    return ListInstanceFieldRef;
+                })();
+                Schema.ListInstanceFieldRef = ListInstanceFieldRef;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ObjectSecurity = (function () {
+                    function ObjectSecurity() {
+                    }
+                    return ObjectSecurity;
+                })();
+                Schema.ObjectSecurity = ObjectSecurity;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var PageLayout = (function () {
+                    function PageLayout() {
+                    }
+                    return PageLayout;
+                })();
+                Schema.PageLayout = PageLayout;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Permissions = (function () {
+                    function Permissions() {
+                    }
+                    return Permissions;
+                })();
+                Schema.Permissions = Permissions;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var ProvisioningTemplate = (function () {
+                    function ProvisioningTemplate() {
+                    }
+                    return ProvisioningTemplate;
+                })();
+                Schema.ProvisioningTemplate = ProvisioningTemplate;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Publishing = (function () {
+                    function Publishing() {
+                    }
+                    return Publishing;
+                })();
+                Schema.Publishing = Publishing;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var RegionalSettings = (function () {
+                    function RegionalSettings() {
+                    }
+                    return RegionalSettings;
+                })();
+                Schema.RegionalSettings = RegionalSettings;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var SupportedUILanguage = (function () {
+                    function SupportedUILanguage() {
+                    }
+                    return SupportedUILanguage;
+                })();
+                Schema.SupportedUILanguage = SupportedUILanguage;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Term = (function () {
+                    function Term() {
+                    }
+                    return Term;
+                })();
+                Schema.Term = Term;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var TermGroup = (function () {
+                    function TermGroup() {
+                    }
+                    return TermGroup;
+                })();
+                Schema.TermGroup = TermGroup;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var TermSet = (function () {
+                    function TermSet() {
+                    }
+                    return TermSet;
+                })();
+                Schema.TermSet = TermSet;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var WebTemplate = (function () {
+                    function WebTemplate() {
+                    }
+                    return WebTemplate;
+                })();
+                Schema.WebTemplate = WebTemplate;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var WorkflowDefinition = (function () {
+                    function WorkflowDefinition() {
+                    }
+                    return WorkflowDefinition;
+                })();
+                Schema.WorkflowDefinition = WorkflowDefinition;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var Workflows = (function () {
+                    function Workflows() {
+                    }
+                    return Workflows;
+                })();
+                Schema.Workflows = Workflows;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Core;
+        (function (Core) {
+            var Schema;
+            (function (Schema) {
+                var WorkflowSubscription = (function () {
+                    function WorkflowSubscription() {
+                    }
+                    return WorkflowSubscription;
+                })();
+                Schema.WorkflowSubscription = WorkflowSubscription;
+            })(Schema = Core.Schema || (Core.Schema = {}));
+        })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
         var Test;
         (function (Test) {
             var logging = { "On": true };
             SP.SOD.executeFunc('sp.js', 'SP.ClientContext', function () {
                 var template = {
-                    "PropertyBagEntries": {},
-                    "WebSettings": {},
-                    "LocalNavigation": {}
+                    Templates: [{
+                            "PropertyBagEntries": {},
+                            "WebSettings": {},
+                            "Lists": {},
+                            "CustomActions": {},
+                            "ComposedLook": {}
+                        }]
                 };
                 Pzl.Sites.Core.read(template, logging).done(function () {
-                    alert('ready');
                 });
             });
         })(Test = Sites.Test || (Sites.Test = {}));

@@ -1,19 +1,3 @@
-var Pzl;
-(function (Pzl) {
-    var Sites;
-    (function (Sites) {
-        var Test;
-        (function (Test) {
-            var siteTemplateConfig = {};
-            var logging = { "On": true };
-            SP.SOD.executeFunc('sp.js', 'SP.ClientContext', function () {
-                Pzl.Sites.Core.read(logging).done(function () {
-                    alert('ready');
-                });
-            });
-        })(Test = Sites.Test || (Sites.Test = {}));
-    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
-})(Pzl || (Pzl = {}));
 /// <reference path="IObjectHandler.ts" />
 var Pzl;
 (function (Pzl) {
@@ -60,8 +44,8 @@ var Pzl;
                         }
                         var def = jQuery.Deferred();
                         dependentPromise.done(function () {
-                            return _this.callback(_this.objects, _this.parameters).done(function () {
-                                def.resolve();
+                            return _this.callback(_this.objects, _this.parameters).done(function (result) {
+                                def.resolve(result);
                             });
                         });
                         return def.promise();
@@ -105,6 +89,24 @@ var Pzl;
                         _super.call(this, "ComposedLook");
                     }
                     ComposedLook.prototype.ProvisionObjects = function (object) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        var theme = web.get_themeInfo();
+                        clientContext.load(theme);
+                        clientContext.executeQueryAsync(function () {
+                            Core.Log.Information(_this.name, "Code execution scope ended");
+                            def.resolve(theme);
+                        }, function (sender, args) {
+                            Core.Log.Information(_this.name, "Code execution scope ended");
+                            Core.Log.Information(_this.name, args.get_message());
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
+                    ComposedLook.prototype.ReadObjects = function (object) {
                         var _this = this;
                         Core.Log.Information(this.name, "Code execution scope started");
                         var def = jQuery.Deferred();
@@ -226,6 +228,39 @@ var Pzl;
                                 Core.Log.Error(_this.name, "" + args.get_message());
                                 def.resolve(sender, args);
                             });
+                        }, function (sender, args) {
+                            Core.Log.Information(_this.name, "Provisioning of objects failed");
+                            Core.Log.Error(_this.name, "" + args.get_message());
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
+                    CustomActions.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        var def = jQuery.Deferred();
+                        Core.Log.Information(this.name, "Starting provisioning of objects");
+                        var clientContext = SP.ClientContext.get_current();
+                        var userCustomActions = clientContext.get_web().get_userCustomActions();
+                        var usercustomActionInstances = [];
+                        var actions = [];
+                        clientContext.load(userCustomActions);
+                        clientContext.executeQueryAsync(function () {
+                            var listEnumerator = userCustomActions.getEnumerator();
+                            var i = 0;
+                            while (listEnumerator.moveNext()) {
+                                var action = listEnumerator.get_current();
+                                usercustomActionInstances[i] = action;
+                                var ac = {
+                                    "Location": action.get_location(),
+                                    "Seqeuence": action.get_sequence(),
+                                    "ScriptSrc": action.get_scriptSrc(),
+                                    "Name": action.get_name(),
+                                    "Title": action.get_title()
+                                };
+                                actions.push(ac);
+                                i++;
+                            }
+                            def.resolve(actions);
                         }, function (sender, args) {
                             Core.Log.Information(_this.name, "Provisioning of objects failed");
                             Core.Log.Error(_this.name, "" + args.get_message());
@@ -539,6 +574,46 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+/*
+
+[
+    {
+      "Dest": "SitePages/Homepage.aspx",
+      "Overwrite": true,
+      "Src": "{resources}/SitePages/Homepage.txt",
+      "RemoveExistingWebParts": true,
+      "Properties": {
+        "ContentTypeId": "0x010109010092214CADC5FC4262A177C632F516412E"
+      },
+      "WebParts": [
+        {
+          "Title": "Image Viewer",
+          "Zone": "LeftColumn",
+          "Order": 0,
+          "Contents": {
+            "Xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?><WebPart xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.microsoft.com/WebPart/v2\"><Title>Image Viewer</Title><FrameType>None</FrameType><Assembly>Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Assembly><TypeName>Microsoft.SharePoint.WebPartPages.ImageWebPart</TypeName><ImageLink xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><AlternativeText xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><VerticalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Middle</VerticalAlignment><HorizontalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Center</HorizontalAlignment><BackgroundColor xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">transparent</BackgroundColor></WebPart>"
+          }
+        },
+        {
+          "Title": "SiteFeed",
+          "Zone": "LeftColumn",
+          "Order": 1,
+          "Contents": {
+            "FileUrl": "{webpartgallery}/SiteFeed.dwp"
+          }
+        },
+        {
+          "Title": "MyWebPart",
+          "Zone": "RightColumn",
+          "Order": 0,
+          "Contents": {
+            "FileUrl": "{resources}/WebParts/MyWebPart.txt"
+          }
+        }
+      ]
+    }
+  ]
+*/ 
 /// <reference path="IRoleDefinition.ts" />
 /// <reference path="IRoleAssignment.ts" />
 /// <reference path="IContentTypeBinding.ts" />
@@ -911,6 +986,55 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    Lists.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var listobjects = [];
+                        var clientContext = SP.ClientContext.get_current();
+                        var lists = clientContext.get_web().get_lists();
+                        var listInstances = [];
+                        clientContext.load(lists);
+                        clientContext.executeQueryAsync(function () {
+                            var listEnumerator = lists.getEnumerator();
+                            var i = 0;
+                            while (listEnumerator.moveNext()) {
+                                listInstances[i] = listEnumerator.get_current();
+                                var list = {
+                                    "Title": listInstances[i].get_title(),
+                                    "Url": "",
+                                    "TemplateType": listInstances[i].get_baseType(),
+                                    "Security": {},
+                                    "Folders": [],
+                                    "ContentTypeBindings": []
+                                };
+                                listobjects.push(list);
+                                clientContext.load(listInstances[i].get_contentTypes());
+                                clientContext.load(listInstances[i].get_views());
+                                clientContext.load(listInstances[i].get_roleAssignments());
+                                clientContext.load(listInstances[i].get_rootFolder().get_folders());
+                                clientContext.load(listInstances[i].get_contentTypes());
+                                i++;
+                            }
+                            if (!clientContext.get_hasPendingRequest()) {
+                                Core.Log.Information(_this.name, "Code execution scope ended");
+                                def.resolve(listobjects);
+                                return def.promise();
+                            }
+                            clientContext.executeQueryAsync(function () {
+                                def.resolve(listobjects);
+                            }, function (sender, args) {
+                                Core.Log.Error(_this.name, "Error: " + args.get_message());
+                                Core.Log.Information(_this.name, "Code execution scope ended");
+                                def.resolve(sender, args);
+                            });
+                        }, function (sender, args) {
+                            Core.Log.Error(_this.name, "Error: " + args.get_message());
+                            Core.Log.Information(_this.name, "Provisioning of objects failed");
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
                     return Lists;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.Lists = Lists;
@@ -918,6 +1042,52 @@ var Pzl;
         })(Core = Sites.Core || (Sites.Core = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
+/*
+"Lists": [
+    {
+      "Title": "Internal Documents",
+      "Url": "InternalDocuments",
+      "TemplateType": 101,
+      "Security": {
+        "BreakRoleInheritance": true,
+        "CopyRoleAssignments": true,
+        "ClearSubscopes": true,
+        "RoleAssignments": [
+          {
+            "Principal": "{associatevisitorgroup}",
+            "RoleDefinition": 1073741826
+          },
+          {
+            "Principal": "{associatemembergroup}",
+            "RoleDefinition": "Contribute"
+          },
+          {
+            "Principal": "{associateownergroup}",
+            "RoleDefinition": "Full Control"
+          }
+        ]
+      },
+      "Folders": [
+        {
+          "Name": "Agenda",
+          "DefaultValues": {
+            "PortDocumentCategory": "-1;#Agenda|bdbd7af3-45ea-4993-a243-be91c0e5a6a8"
+          }
+        },
+        {
+          "Name": "Agreements",
+          "DefaultValues": {
+            "PortDocumentCategory": "-1;#Agreements|6689b4c-d2d0-43fa-b916-2e7698b8387d"
+          }
+        }
+      ],
+      "ContentTypeBindings": [
+        {
+          "ContentTypeId": "0x010100B3337B3CDC314FF2B8BC5F38977EDBF0"
+        }
+      ]
+    }
+  ],*/ 
 /// <reference path="..\..\typings\tsd.d.ts" />
 /// <reference path="..\model\ObjectHandlerBase.ts" />
 /// <reference path="..\schema\INavigationNode.ts" />
@@ -1000,6 +1170,33 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    LocalNavigation.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        Core.Log.Information(this.name, "Starting reading of objects");
+                        var navigation = web.get_navigation();
+                        var quickLaunchNodeCollection = navigation.get_quickLaunch();
+                        clientContext.load(navigation);
+                        clientContext.load(quickLaunchNodeCollection);
+                        clientContext.executeQueryAsync(function () {
+                            Core.Log.Information(_this.name, "reading existing navigation nodes");
+                            //var index = quickLaunchNodeCollection.get_count() - 1;
+                            //while (index >= 0) {
+                            //    const oldNode = quickLaunchNodeCollection.itemAt(index);
+                            //    objects.push({ "Url": oldNode.get_url(), "Title": oldNode.get_title() });
+                            //    index--;
+                            //}
+                            Core.Log.Information(_this.name, "reading of objects ended");
+                            def.resolve(objects);
+                        }, function (sender, args) {
+                            Core.Log.Information(_this.name, "Provisioning of objects failed");
+                            Core.Log.Error(_this.name, "" + args.get_message());
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
                     return LocalNavigation;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.LocalNavigation = LocalNavigation;
@@ -1072,6 +1269,19 @@ var Pzl;
                         });
                         return def.promise();
                     };
+                    Pages.prototype.ReadObjects = function (objects) {
+                        var _this = this;
+                        Core.Log.Information(this.name, "Code execution scope started");
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var promises = [];
+                        //TODO
+                        jQuery.when.apply(jQuery, promises).done(function () {
+                            Core.Log.Information(_this.name, "Code execution scope ended");
+                            def.resolve();
+                        });
+                        return def.promise();
+                    };
                     return Pages;
                 })(Core.Model.ObjectHandlerBase);
                 ObjectHandlers.Pages = Pages;
@@ -1115,8 +1325,23 @@ var Pzl;
                         return def.promise();
                     };
                     PropertyBagEntries.prototype.ReadObjects = function (object) {
+                        var _this = this;
                         var def = jQuery.Deferred();
-                        def.resolve();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        var allProperties = web.get_allProperties();
+                        clientContext.load(allProperties);
+                        clientContext.executeQueryAsync(function () {
+                            var values = allProperties.get_fieldValues();
+                            for (var key in values) {
+                                Core.Log.Information(_this.name, "Getting property '" + key + "'");
+                                object[key] = values[key];
+                            }
+                            Core.Log.Information(_this.name, "Read of objects ended");
+                            def.resolve(object);
+                        }, function (sender, args) {
+                            def.resolve(sender, args);
+                        });
                         return def;
                     };
                     return PropertyBagEntries;
@@ -1155,6 +1380,19 @@ var Pzl;
                         clientContext.load(web);
                         clientContext.executeQueryAsync(function () {
                             def.resolve();
+                        }, function (sender, args) {
+                            def.resolve(sender, args);
+                        });
+                        return def.promise();
+                    };
+                    WebSettings.prototype.ReadObjects = function (object) {
+                        var def = jQuery.Deferred();
+                        var clientContext = SP.ClientContext.get_current();
+                        var web = clientContext.get_web();
+                        var folder = web.get_rootFolder();
+                        clientContext.load(folder);
+                        clientContext.executeQueryAsync(function () {
+                            def.resolve({ "WelcomePage": folder.get_welcomePage() });
                         }, function (sender, args) {
                             def.resolve(sender, args);
                         });
@@ -1211,8 +1449,12 @@ var Pzl;
                     }
                     this.array.push(logMsg);
                 };
+                Logger.prototype.toString = function () {
+                    return this.array.join("\n");
+                };
                 Logger.prototype.SaveToFile = function () {
                     var def = jQuery.Deferred();
+                    console.log(this.array);
                     if (!this.loggingOptions || !this.loggingOptions.LoggingFolder) {
                         def.resolve();
                         return def.promise();
@@ -1281,8 +1523,10 @@ var Pzl;
                 queue.forEach(function (q, index) {
                     if (!Core.ObjectHandlers[q])
                         return;
-                    queueItems.push(new Core.Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new Core.ObjectHandlers[q]()[method]));
+                    var methodname = ObjectHandlerMethods[method];
+                    queueItems.push(new Core.Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new Core.ObjectHandlers[q]()[methodname]));
                 });
+                var results = [];
                 var promises = [];
                 promises.push(jQuery.Deferred());
                 promises[0].resolve();
@@ -1291,11 +1535,18 @@ var Pzl;
                 while (queueItems[index - 1] != undefined) {
                     var i = promises.length - 1;
                     promises.push(queueItems[index - 1].execute(promises[i]));
+                    results[queueItems[index - 1].name] = null;
                     index++;
                 }
                 ;
-                jQuery.when.apply(jQuery, promises).done(function () {
-                    def.resolve();
+                jQuery.when.apply(jQuery, promises).then(function () {
+                    var args = arguments;
+                    var n = 1;
+                    for (var i in results) {
+                        results[i] = args[n];
+                        n++;
+                    }
+                    def.resolve(results);
                 });
                 return def.promise();
             }
@@ -1315,17 +1566,17 @@ var Pzl;
                 return def.promise();
             }
             Core.init = init;
-            function read(loggingOptions) {
-                var template = { "PropertyBagEntries": {} };
+            function read(template, loggingOptions) {
                 var def = jQuery.Deferred();
                 ShowWaitMessage("Reading template", "This might take a moment..", 130, 600);
                 Core.Log = new Core.Logger(loggingOptions);
                 var queue = getSetupQueue(template);
-                start(template, queue, ObjectHandlerMethods.ReadObjects).then(function () {
+                start(template, queue, ObjectHandlerMethods.ReadObjects).then(function (generated) {
                     var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
                     Core.Log.Information("Reading", "All done in " + provisioningTime + " seconds");
                     Core.Log.SaveToFile().then(function () {
                         setupWebDialog.close(null);
+                        console.log(generated);
                         def.resolve();
                     });
                 });
@@ -1333,6 +1584,28 @@ var Pzl;
             }
             Core.read = read;
         })(Core = Sites.Core || (Sites.Core = {}));
+    })(Sites = Pzl.Sites || (Pzl.Sites = {}));
+})(Pzl || (Pzl = {}));
+var Pzl;
+(function (Pzl) {
+    var Sites;
+    (function (Sites) {
+        var Test;
+        (function (Test) {
+            var logging = { "On": true };
+            SP.SOD.executeFunc('sp.js', 'SP.ClientContext', function () {
+                var template = {
+                    "PropertyBagEntries": {},
+                    "WebSettings": {},
+                    "LocalNavigation": {},
+                    "Lists": {},
+                    "CustomActions": {},
+                    "ComposedLook": {}
+                };
+                Pzl.Sites.Core.read(template, logging).done(function () {
+                });
+            });
+        })(Test = Sites.Test || (Sites.Test = {}));
     })(Sites = Pzl.Sites || (Pzl.Sites = {}));
 })(Pzl || (Pzl = {}));
 //# sourceMappingURL=js-site.core.js.map

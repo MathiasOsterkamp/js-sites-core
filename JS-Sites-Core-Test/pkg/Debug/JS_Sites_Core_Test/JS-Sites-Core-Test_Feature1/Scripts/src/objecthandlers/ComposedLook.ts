@@ -22,10 +22,33 @@ module Pzl.Sites.Core.ObjectHandlers {
             var def = jQuery.Deferred();     
             var clientContext = SP.ClientContext.get_current();
             var web = clientContext.get_web();     
+            var theme = web.get_themeInfo()    
+            clientContext.load(theme);
+            clientContext.executeQueryAsync(
+                () => {
+                    Core.Log.Information(this.name, `Code execution scope ended`);
+                   
+                    def.resolve(theme);
+                },
+                (sender, args) => {
+                    Core.Log.Information(this.name, `Code execution scope ended`);
+                    Core.Log.Information(this.name, args.get_message());
+                    def.resolve(sender, args);
+                }
+            )
+              
+            return def.promise();
+        }
+        ReadObjects(object: Schema.IComposedLook) {
+            Core.Log.Information(this.name, `Code execution scope started`);
+
+            var def = jQuery.Deferred();
+            var clientContext = SP.ClientContext.get_current();
+            var web = clientContext.get_web();
             var colorPaletteUrl = object.ColorPaletteUrl ? Helpers.GetUrlWithoutTokens(object.ColorPaletteUrl) : "";
             var fontSchemeUrl = object.FontSchemeUrl ? Helpers.GetUrlWithoutTokens(object.FontSchemeUrl) : "";
             var backgroundImageUrl = object.BackgroundImageUrl ? Helpers.GetUrlWithoutTokens(object.BackgroundImageUrl) : null;
-            web.applyTheme(colorPaletteUrl, fontSchemeUrl, backgroundImageUrl, true);         
+            web.applyTheme(colorPaletteUrl, fontSchemeUrl, backgroundImageUrl, true);
             web.update();
             clientContext.executeQueryAsync(
                 () => {
@@ -38,7 +61,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                     def.resolve(sender, args);
                 }
             )
-              
+
             return def.promise();
         }
     } 

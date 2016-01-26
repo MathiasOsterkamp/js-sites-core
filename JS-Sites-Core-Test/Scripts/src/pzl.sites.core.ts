@@ -1,5 +1,5 @@
 /// <reference path="..\typings\tsd.d.ts" />
-/// <reference path="schema/ISiteSchema.ts" />
+/// <reference path="schema/IProvisioning.ts" />
 /// <reference path="objecthandlers/Lists.ts" />
 /// <reference path="objecthandlers/ComposedLook.ts" />
 /// <reference path="objecthandlers/Files.ts" />
@@ -28,7 +28,7 @@ module Pzl.Sites.Core {
     function getSetupQueue(json) {
         return Object.keys(json);
     }
-    function start(json: Schema.SiteSchema, queue: Array<string>, method: ObjectHandlerMethods) {
+    function start(json: Schema.IProvisioningTemplate, queue: Array<string>, method: ObjectHandlerMethods) {
         var def = jQuery.Deferred();
         
         startTime = new Date().getTime();
@@ -67,13 +67,13 @@ module Pzl.Sites.Core {
         
         return def.promise();   
     }
-    export function init(template : Schema.SiteSchema, loggingOptions: Model.ILoggingOptions) {
+    export function init(template: Schema.IProvisioning, loggingOptions: Model.ILoggingOptions) {
         var def = jQuery.Deferred();
         ShowWaitMessage("Applying template", "This might take a moment..", 130, 600);
         
         Log = new Logger(loggingOptions);
         var queue = getSetupQueue(template);
-        start(template, queue, ObjectHandlerMethods.ProvisionObjects).then(() => {
+        start(template.Templates[0], queue, ObjectHandlerMethods.ProvisionObjects).then(() => {
             var provisioningTime = ((new Date().getTime()) - startTime)/1000;
             Log.Information("Provisioning", `All done in ${provisioningTime} seconds`);
             Log.SaveToFile().then(() => {
@@ -84,15 +84,15 @@ module Pzl.Sites.Core {
         
         return def.promise();   
     }
-    export function read(template: Schema.SiteSchema,loggingOptions: Model.ILoggingOptions): JQueryDeferred<Schema.SiteSchema>{
+    export function read(template: Schema.IProvisioning, loggingOptions: Model.ILoggingOptions): JQueryDeferred<Schema.IProvisioning> {
 
-      
+
         var def = jQuery.Deferred();
         ShowWaitMessage("Reading template", "This might take a moment..", 130, 600);
 
         Log = new Logger(loggingOptions);
         var queue = getSetupQueue(template);
-        start(template, queue, ObjectHandlerMethods.ReadObjects).then((generated) => {
+        start(template.Templates[0], queue, ObjectHandlerMethods.ReadObjects).then((generated) => {
             var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
             Log.Information("Reading", `All done in ${provisioningTime} seconds`);
             Log.SaveToFile().then(() => {

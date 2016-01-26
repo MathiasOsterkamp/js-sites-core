@@ -316,3 +316,43 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
     }
 }
+/*
+
+[
+    {
+      "Dest": "SitePages/Homepage.aspx",
+      "Overwrite": true,
+      "Src": "{resources}/SitePages/Homepage.txt",
+      "RemoveExistingWebParts": true,
+      "Properties": {
+        "ContentTypeId": "0x010109010092214CADC5FC4262A177C632F516412E"
+      },
+      "WebParts": [
+        {
+          "Title": "Image Viewer",
+          "Zone": "LeftColumn",
+          "Order": 0,
+          "Contents": {
+            "Xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?><WebPart xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.microsoft.com/WebPart/v2\"><Title>Image Viewer</Title><FrameType>None</FrameType><Assembly>Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Assembly><TypeName>Microsoft.SharePoint.WebPartPages.ImageWebPart</TypeName><ImageLink xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><AlternativeText xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><VerticalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Middle</VerticalAlignment><HorizontalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Center</HorizontalAlignment><BackgroundColor xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">transparent</BackgroundColor></WebPart>"
+          }
+        },
+        {
+          "Title": "SiteFeed",
+          "Zone": "LeftColumn",
+          "Order": 1,
+          "Contents": {
+            "FileUrl": "{webpartgallery}/SiteFeed.dwp"
+          }
+        },
+        {
+          "Title": "MyWebPart",
+          "Zone": "RightColumn",
+          "Order": 0,
+          "Contents": {
+            "FileUrl": "{resources}/WebParts/MyWebPart.txt"
+          }
+        }
+      ]
+    }
+  ]
+*/

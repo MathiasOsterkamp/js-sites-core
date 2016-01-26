@@ -31,9 +31,14 @@ module Pzl.Sites.Core {
             }
             this.array.push(logMsg);
         }
-        
+
+        toString() {
+            return this.array.join("\n");
+        }
+
         SaveToFile() {            
             var def = jQuery.Deferred();
+            console.log(this.array);
             if(!this.loggingOptions || !this.loggingOptions.LoggingFolder) {
                 def.resolve();
                 return def.promise();

@@ -216,7 +216,7 @@ module Pzl.Sites.Core.ObjectHandlers {
             if (!obj.Views) return;
             obj.Views.forEach((v) => {
                 mapping[v.List] = mapping[v.List] || [];
-                mapping[v.List].push(jQuery.extend(v, { "Url": obj.Dest }));
+                mapping[v.List].push(jQuery.extend(v, { "Url": obj.Folder }));
             });
         });
         Object.keys(mapping).forEach((l, index) => {
@@ -283,13 +283,13 @@ module Pzl.Sites.Core.ObjectHandlers {
             var clientContext = SP.ClientContext.get_current();
             var promises = [];
             objects.forEach(function(obj) {
-                AddFileByUrl(obj.Dest, obj.Src, obj.Overwrite);
+                AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite);
             });
             jQuery.when.apply(jQuery, promises).done(() => {
                 var promises = [];
                 objects.forEach((obj) => {
                     if (obj.WebParts && obj.WebParts.length > 0) {
-                        promises.push(AddWebPartsToWebPartPage(obj.Dest, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
+                        promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
                     }
                 });
 
@@ -297,7 +297,44 @@ module Pzl.Sites.Core.ObjectHandlers {
                     var promises = [];
                     objects.forEach((obj) => {
                         if (obj.Properties && Object.keys(obj.Properties).length > 0) {
-                            promises.push(ApplyFileProperties(obj.Dest, obj.Properties));
+                            promises.push(ApplyFileProperties(obj.Folder, obj.Properties));
+                        }
+                    });
+
+
+                    jQuery.when.apply(jQuery, promises).done(() => {
+                        ModifyHiddenViews(objects).then(() => {
+                            Core.Log.Information(this.name, `Code execution scope ended`);
+                            def.resolve();
+                        });
+                    });
+                });
+            });
+
+
+            return def.promise();
+        }
+        ReadObjects(objects: Array<Schema.IFile>) {
+            Core.Log.Information(this.name, `Code execution scope started`);
+            var def = jQuery.Deferred();
+            var clientContext = SP.ClientContext.get_current();
+            var promises = [];
+            objects.forEach(function (obj) {
+                AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite);
+            });
+            jQuery.when.apply(jQuery, promises).done(() => {
+                var promises = [];
+                objects.forEach((obj) => {
+                    if (obj.WebParts && obj.WebParts.length > 0) {
+                        promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
+                    }
+                });
+
+                jQuery.when.apply(jQuery, promises).done(() => {
+                    var promises = [];
+                    objects.forEach((obj) => {
+                        if (obj.Properties && Object.keys(obj.Properties).length > 0) {
+                            promises.push(ApplyFileProperties(obj.Folder, obj.Properties));
                         }
                     });
 
@@ -316,3 +353,43 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
     }
 }
+/*
+
+[
+    {
+      "Dest": "SitePages/Homepage.aspx",
+      "Overwrite": true,
+      "Src": "{resources}/SitePages/Homepage.txt",
+      "RemoveExistingWebParts": true,
+      "Properties": {
+        "ContentTypeId": "0x010109010092214CADC5FC4262A177C632F516412E"
+      },
+      "WebParts": [
+        {
+          "Title": "Image Viewer",
+          "Zone": "LeftColumn",
+          "Order": 0,
+          "Contents": {
+            "Xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?><WebPart xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.microsoft.com/WebPart/v2\"><Title>Image Viewer</Title><FrameType>None</FrameType><Assembly>Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c</Assembly><TypeName>Microsoft.SharePoint.WebPartPages.ImageWebPart</TypeName><ImageLink xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><AlternativeText xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\" /><VerticalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Middle</VerticalAlignment><HorizontalAlignment xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">Center</HorizontalAlignment><BackgroundColor xmlns=\"http://schemas.microsoft.com/WebPart/v2/Image\">transparent</BackgroundColor></WebPart>"
+          }
+        },
+        {
+          "Title": "SiteFeed",
+          "Zone": "LeftColumn",
+          "Order": 1,
+          "Contents": {
+            "FileUrl": "{webpartgallery}/SiteFeed.dwp"
+          }
+        },
+        {
+          "Title": "MyWebPart",
+          "Zone": "RightColumn",
+          "Order": 0,
+          "Contents": {
+            "FileUrl": "{resources}/WebParts/MyWebPart.txt"
+          }
+        }
+      ]
+    }
+  ]
+*/

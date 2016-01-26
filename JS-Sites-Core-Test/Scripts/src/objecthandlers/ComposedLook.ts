@@ -16,16 +16,44 @@ module Pzl.Sites.Core.ObjectHandlers {
         constructor() {
             super("ComposedLook")
         }
-        ProvisionObjects(object : Schema.IComposedLook) {
+        ReadObjects(object : Schema.IComposedLook) {
             Core.Log.Information(this.name, `Code execution scope started`);
             
             var def = jQuery.Deferred();     
             var clientContext = SP.ClientContext.get_current();
             var web = clientContext.get_web();     
-            var colorPaletteUrl = object.ColorPaletteUrl ? Helpers.GetUrlWithoutTokens(object.ColorPaletteUrl) : "";
-            var fontSchemeUrl = object.FontSchemeUrl ? Helpers.GetUrlWithoutTokens(object.FontSchemeUrl) : "";
-            var backgroundImageUrl = object.BackgroundImageUrl ? Helpers.GetUrlWithoutTokens(object.BackgroundImageUrl) : null;
-            web.applyTheme(colorPaletteUrl, fontSchemeUrl, backgroundImageUrl, true);         
+            var theme = web.get_themeInfo()    
+            clientContext.load(theme);
+            clientContext.executeQueryAsync(
+                () => {
+                    Core.Log.Information(this.name, `Code execution scope ended`);
+                   
+                    def.resolve({
+                        "ColorPaletteUrl": "",
+                        "FontSchemeUrl": "",
+                        "BackgroundImageUrl":theme.get_themeBackgroundImageUri()
+                    });
+                },
+                (sender, args) => {
+                    Core.Log.Information(this.name, `Code execution scope ended`);
+                    Core.Log.Information(this.name, args.get_message());
+                    def.resolve(sender, args);
+                }
+            )
+              
+            return def.promise();
+        }
+        ProvisionObjects(object: Schema.IComposedLook) {
+
+            Core.Log.Information(this.name, `Code execution scope started`);
+
+            var def = jQuery.Deferred();
+            var clientContext = SP.ClientContext.get_current();
+            var web = clientContext.get_web();
+            var colorPaletteUrl = object.ColorFile ? Helpers.GetUrlWithoutTokens(object.ColorFile) : "";
+            var fontSchemeUrl = object.FontFile ? Helpers.GetUrlWithoutTokens(object.FontFile) : "";
+            var backgroundImageUrl = object.BackgroundFile ? Helpers.GetUrlWithoutTokens(object.BackgroundFile) : null;
+            web.applyTheme(colorPaletteUrl, fontSchemeUrl, backgroundImageUrl, true);
             web.update();
             clientContext.executeQueryAsync(
                 () => {
@@ -38,7 +66,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                     def.resolve(sender, args);
                 }
             )
-              
+
             return def.promise();
         }
     } 

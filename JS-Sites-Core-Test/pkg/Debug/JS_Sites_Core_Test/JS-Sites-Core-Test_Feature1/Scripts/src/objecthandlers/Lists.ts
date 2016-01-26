@@ -356,5 +356,120 @@ module Pzl.Sites.Core.ObjectHandlers {
 
             return def.promise();
         }
+        ReadObjects(objects: Array<Schema.IListInstance>) {
+            Core.Log.Information(this.name, `Code execution scope started`);
+            var def = jQuery.Deferred();
+            var listobjects = [];
+            var clientContext = SP.ClientContext.get_current();
+            var lists = clientContext.get_web().get_lists();
+            var listInstances: Array<SP.List> = [];
+
+            clientContext.load(lists);
+            clientContext.executeQueryAsync(
+                () => {
+                    var listEnumerator = lists.getEnumerator();
+                    var i = 0;
+                    while (listEnumerator.moveNext()) {
+                        listInstances[i] = listEnumerator.get_current();
+                        
+                        var list = {
+                            "Title": listInstances[i].get_title(),
+                            "Url": "",
+                            "TemplateType": listInstances[i].get_baseType(),
+                            "Security": {
+
+
+                            },
+                            "Folders": [
+
+                            ],
+                            "ContentTypeBindings": [
+
+                            ]
+                        };
+                        listobjects.push(list);
+                        clientContext.load(listInstances[i].get_contentTypes());
+                        clientContext.load(listInstances[i].get_views());
+                        clientContext.load(listInstances[i].get_roleAssignments());
+                        clientContext.load(listInstances[i].get_rootFolder().get_folders());
+                        clientContext.load(listInstances[i].get_contentTypes());
+
+                        i++;
+                    }
+
+                    
+
+                    if (!clientContext.get_hasPendingRequest()) {
+                        Core.Log.Information(this.name, `Code execution scope ended`);
+                        def.resolve(listobjects);
+                        return def.promise();
+                    }
+
+                    clientContext.executeQueryAsync(
+                        () => {
+                            def.resolve(listobjects);
+                           
+                        },
+                        (sender, args) => {
+                            Core.Log.Error(this.name, `Error: ${args.get_message()}`);
+                            Core.Log.Information(this.name, `Code execution scope ended`);
+                            def.resolve(sender, args);
+                        });
+                },
+                (sender, args) => {
+                    Core.Log.Error(this.name, `Error: ${args.get_message()}`);
+                    Core.Log.Information(this.name, `Provisioning of objects failed`);
+                    def.resolve(sender, args);
+                });
+
+            return def.promise();
+        }
     }
 }
+
+/*
+"Lists": [
+    {
+      "Title": "Internal Documents",
+      "Url": "InternalDocuments",
+      "TemplateType": 101,
+      "Security": {
+        "BreakRoleInheritance": true,
+        "CopyRoleAssignments": true,
+        "ClearSubscopes": true,
+        "RoleAssignments": [
+          {
+            "Principal": "{associatevisitorgroup}",
+            "RoleDefinition": 1073741826
+          },
+          {
+            "Principal": "{associatemembergroup}",
+            "RoleDefinition": "Contribute"
+          },
+          {
+            "Principal": "{associateownergroup}",
+            "RoleDefinition": "Full Control"
+          }
+        ]
+      },
+      "Folders": [
+        {
+          "Name": "Agenda",
+          "DefaultValues": {
+            "PortDocumentCategory": "-1;#Agenda|bdbd7af3-45ea-4993-a243-be91c0e5a6a8"
+          }
+        },
+        {
+          "Name": "Agreements",
+          "DefaultValues": {
+            "PortDocumentCategory": "-1;#Agreements|6689b4c-d2d0-43fa-b916-2e7698b8387d"
+          }
+        }
+      ],
+      "ContentTypeBindings": [
+        {
+          "ContentTypeId": "0x010100B3337B3CDC314FF2B8BC5F38977EDBF0"
+        }
+      ]
+    }
+  ],*/

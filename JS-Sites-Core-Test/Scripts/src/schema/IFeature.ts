@@ -1,5 +1,18 @@
 module Pzl.Sites.Core.Schema {
+ 
+
     export interface IFeature {
-        Name: string;
+        ID: string;
+        Deactivate: boolean;
+        Description: string;
     }
+
+    export class Feature implements IFeature {
+        ID: string;
+        Deactivate: boolean;
+        Description: string;
+    }
+
+
+    
 }

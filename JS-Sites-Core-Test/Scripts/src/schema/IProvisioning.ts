@@ -10,16 +10,10 @@
 /// <reference path="IWebSettings.ts" />
 
 module Pzl.Sites.Core.Schema {
-    export interface SiteSchema {
-        Lists: Array<IListInstance>;
-        Files: Array<IFile>;
-        Pages: Array<IPage>;
-        Features: Array<IFeature>;
-        LocalNavigation: Array<INavigationNode>;
-        CustomActions: Array<ICustomAction>;
-        ComposedLook: IComposedLook;
-        PropertyBagEntries: Object;
-        Parameters: Object;
-        WebSettings: IWebSettings;
+    export interface IProvisioning{
+        Templates: Array<IProvisioningTemplate>;
+    }
+    export class Provisioning implements IProvisioning {
+        Templates: Array<IProvisioningTemplate>;
     }
 }

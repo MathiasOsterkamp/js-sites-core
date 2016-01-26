@@ -61,5 +61,19 @@ module Pzl.Sites.Core.ObjectHandlers {
             
             return def.promise();
         }
+        ReadObjects(objects: Array<Schema.IPage>) {
+            Core.Log.Information(this.name, `Code execution scope started`);
+            var def = jQuery.Deferred();
+            var clientContext = SP.ClientContext.get_current();
+
+            var promises = [];
+           //TODO
+            jQuery.when.apply(jQuery, promises).done(() => {
+                Core.Log.Information(this.name, `Code execution scope ended`);
+                def.resolve();
+            });
+
+            return def.promise();
+        }
     } 
 }

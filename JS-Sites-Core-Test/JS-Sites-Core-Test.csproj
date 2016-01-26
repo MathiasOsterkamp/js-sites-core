@@ -60,6 +60,30 @@
       <SharePointProjectItemId>{d01dea13-2464-4963-8877-040cd6869d76}</SharePointProjectItemId>
     </None>
     <Content Include="Scripts\Elements.xml" />
+    <TypeScriptCompile Include="Scripts\src\schema\IAudit.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\ICustomActions.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IFeatures.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\ITerm.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\ITermSet.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\ITermGroup.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IAddin.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IPageLayout.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IPublishing.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IDesignPackage.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IWebTemplate.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IWorkflowDefinition.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IWorkflowSubscription.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IWorkflows.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IObjectSecurity.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IBreakRoleInheritance.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IListInstanceFieldRef.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IPermissions.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\ISiteGroup.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IUser.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IAuditSettings.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\ISupportedUILanguages.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IRegionalSettings.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IProvisioningTemplate.ts" />
     <TypeScriptCompile Include="Scripts\src\test\test.ts" />
     <Content Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -116,7 +140,7 @@
     <TypeScriptCompile Include="Scripts\src\objecthandlers\PropertyBagEntries.ts" />
     <TypeScriptCompile Include="Scripts\src\objecthandlers\WebSettings.ts" />
     <TypeScriptCompile Include="Scripts\src\pzl.sites.core.ts" />
-    <TypeScriptCompile Include="Scripts\src\schema\HiddenView.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IHiddenView.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IComposedLook.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IContents.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IContentType.ts" />
@@ -132,7 +156,7 @@
     <TypeScriptCompile Include="Scripts\src\schema\IRoleAssignment.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IRoleDefinition.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\ISecurity.ts" />
-    <TypeScriptCompile Include="Scripts\src\schema\ISiteSchema.ts" />
+    <TypeScriptCompile Include="Scripts\src\schema\IProvisioning.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IView.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IWebPart.ts" />
     <TypeScriptCompile Include="Scripts\src\schema\IWebSettings.ts" />
