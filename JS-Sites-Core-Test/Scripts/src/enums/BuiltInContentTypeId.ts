@@ -1,0 +1,117 @@
+﻿module Pzl.Sites.Core.Enums {
+    export class BuiltInContentTypeId {
+        static AdminTask: string = "0x010802";
+        static Announcement: string = "0x0104";
+        static BasicPage: string = "0x010109";
+        static BlogComment: string = "0x0111";
+        static BlogPost: string = "0x0110";
+        static CallTracking: string = "0x0100807FBAC5EB8A4653B8D24775195B5463";
+        static Contact: string = "0x0106";
+        static Discussion: string = "0x012002";
+        static DisplayTemplateJS: string = "0x0101002039C03B61C64EC4A04F5361F3851068";
+        static Document: string = "0x0101";
+        static DocumentSet: string = "0x0120D520";
+        static DocumentWorkflowItem: string = "0x010107";
+        static DomainGroup: string = "0x010C";
+        static DublinCoreName: string = "0x01010B";
+        static Event: string = "0x0102";
+        static FarEastContact: string = "0x0116";
+        static Folder: string = "0x0120";
+        static GbwCirculationCTName: string = "0x01000F389E14C9CE4CE486270B9D4713A5D6";
+        static GbwOfficeNoticeCTName: string = "0x01007CE30DD1206047728BAFD1C39A850120";
+        static HealthReport: string = "0x0100F95DB3A97E8046B58C6A54FB31F2BD46";
+        static HealthRuleDefinition: string = "0x01003A8AA7A4F53046158C5ABD98036A01D5";
+        static Holiday: string = "0x01009BE2AB5291BF4C1A986910BD278E4F18";
+        static IMEDictionaryItem: string = "0x010018F21907ED4E401CB4F14422ABC65304";
+        static Issue: string = "0x0103";
+        static Item: string = "0x01";
+        static Link: string = "0x0105";
+        static LinkToDocument: string = "0x01010A";
+        static MasterPage: string = "0x010105";
+        static Message: string = "0x0107";
+        static ODCDocument: string = "0x010100629D00608F814DD6AC8A86903AEE72AA";
+        static Person: string = "0x010A";
+        static Picture: string = "0x010102";
+        static Resource: string = "0x01004C9F4486FBF54864A7B0A33D02AD19B1";
+        static ResourceGroup: string = "0x0100CA13F2F8D61541B180952DFB25E3E8E4";
+        static ResourceReservation: string = "0x0102004F51EFDEA49C49668EF9C6744C8CF87D";
+        static RootOfList: string = "0x012001";
+        static Schedule: string = "0x0102007DBDC1392EAF4EBBBF99E41D8922B264";
+        static ScheduleAndResourceReservation: string = "0x01020072BB2A38F0DB49C3A96CF4FA85529956";
+        static SharePointGroup: string = "0x010B";
+        static SummaryTask: string = "0x012004";
+        static System: string = "0x";
+        static Task: string = "0x0108";
+        static Timecard: string = "0x0100C30DDA8EDB2E434EA22D793D9EE42058";
+        static UDCDocument: string = "0x010100B4CBD48E029A4AD8B62CB0E41868F2B0";
+        static UntypedDocument: string = "0x010104";
+        static WebPartPage: string = "0x01010901";
+        static WhatsNew: string = "0x0100A2CA87FF01B442AD93F37CD7DD0943EB";
+        static Whereabouts: string = "0x0100FBEEE6F0C500489B99CDA6BB16C398F7";
+        static WikiDocument: string = "0x010108";
+        static WorkflowHistory: string = "0x0109";
+        static WorkflowTask: string = "0x010801";
+        static XMLDocument: string = "0x010101";
+        static XSLStyle: string = "0x010100734778F2B7DF462491FC91844AE431CF";
+
+        static Contains(id: string): boolean {
+            var s_dict = {};
+            s_dict[this.AdminTask] = true;
+            s_dict[this.Announcement] = true;
+            s_dict[this.BasicPage] = true;
+            s_dict[this.BlogComment] = true;
+            s_dict[this.CallTracking] = true;
+            s_dict[this.Contact] = true;
+            s_dict[this.Discussion] = true;
+            s_dict[this.DisplayTemplateJS] = true;
+            s_dict[this.Document] = true;
+            s_dict[this.DocumentSet] = true;
+            s_dict[this.DocumentWorkflowItem] = true;
+            s_dict[this.DomainGroup] = true;
+            s_dict[this.DublinCoreName] = true;
+            s_dict[this.Event] = true;
+            s_dict[this.FarEastContact] = true;
+            s_dict[this.Folder] = true;
+            s_dict[this.GbwCirculationCTName] = true;
+            s_dict[this.GbwOfficeNoticeCTName] = true;
+            s_dict[this.HealthReport] = true;
+            s_dict[this.HealthRuleDefinition] = true;
+            s_dict[this.Holiday] = true;
+            s_dict[this.IMEDictionaryItem] = true;
+            s_dict[this.Issue] = true;
+            s_dict[this.Item] = true;
+            s_dict[this.Link] = true;
+            s_dict[this.LinkToDocument] = true;
+            s_dict[this.MasterPage] = true;
+            s_dict[this.Message] = true;
+            s_dict[this.ODCDocument] = true;
+            s_dict[this.Person] = true;
+            s_dict[this.Picture] = true;
+            s_dict[this.Resource] = true;
+            s_dict[this.ResourceGroup] = true;
+            s_dict[this.ResourceReservation] = true;
+            s_dict[this.RootOfList] = true;
+            s_dict[this.Schedule] = true;
+            s_dict[this.ScheduleAndResourceReservation] = true;
+            s_dict[this.SharePointGroup] = true;
+            s_dict[this.SummaryTask] = true;
+            s_dict[this.System] = true;
+            s_dict[this.Task] = true;
+            s_dict[this.Timecard] = true;
+            s_dict[this.UDCDocument] = true;
+            s_dict[this.UntypedDocument] = true;
+            s_dict[this.WebPartPage] = true;
+            s_dict[this.WhatsNew] = true;
+            s_dict[this.Whereabouts] = true;
+            s_dict[this.WikiDocument] = true;
+            s_dict[this.WorkflowHistory] = true;
+            s_dict[this.WorkflowTask] = true;
+            s_dict[this.XMLDocument] = true;
+            s_dict[this.XSLStyle] = true;
+
+
+            return s_dict[id];
+        }
+
+    }
+}

@@ -2,7 +2,8 @@
 
 module Pzl.Sites.Core.Model {
     export class TemplateQueueItem {
-        name :string;
+        name: string;
+        contextFactory: Model.IContextFactoryInstance;
         index: number;
         objects: any;
         parameters: any;
@@ -20,12 +21,13 @@ module Pzl.Sites.Core.Model {
             return def.promise();
         }
         
-        constructor(name : string, index : number, objects: any, parameters: any, callback : Function) {
+        constructor(name : string, index : number, objects: any, parameters: any, callback : Function,factory:Model.IContextFactoryInstance) {
             this.name = name;
             this.index = index;
             this.objects = objects;
             this.parameters = parameters;
             this.callback = callback;
+            this.contextFactory = factory;
         }
     }
 }

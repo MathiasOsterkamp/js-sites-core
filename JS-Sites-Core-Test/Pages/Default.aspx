@@ -13,7 +13,7 @@
     <meta name="WebPartPageExpansion" content="full" />
 
     <!-- Add your CSS styles to the following file -->
-    <link rel="Stylesheet" type="text/css" href="../Content/App.css" />
+    <link rel="Stylesheet" type="text/css" href="../Content/App.css" /> 
 
     <!-- Add your JavaScript to the following file -->
     <script type="text/javascript" src="../Scripts/js-site.core.js"></script>
@@ -29,6 +29,10 @@
 
     <div>
         <p id="message">
+            <!-- The following content will be replaced with the user name when you run the app - see App.js -->
+            initializing...
+        </p>
+         <p id="resultcontent" style="white-space:pre;font-family:monospace">
             <!-- The following content will be replaced with the user name when you run the app - see App.js -->
             initializing...
         </p>

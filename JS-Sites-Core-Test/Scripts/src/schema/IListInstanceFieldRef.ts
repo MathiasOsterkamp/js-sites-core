@@ -1,9 +1,9 @@
 module Pzl.Sites.Core.Schema {
     export interface IListInstanceFieldRef {
-        DisplayName: string;
+        Name: string;
        
     }
     export class ListInstanceFieldRef implements IListInstanceFieldRef {
-        DisplayName: string;
+        Name: string;
     }
 }

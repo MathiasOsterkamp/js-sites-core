@@ -13,96 +13,97 @@
 /// <reference path="model/ILoggingOptions.ts" />
 
 module Pzl.Sites.Core {
-    var startTime = null;  
+    var startTime = null;
     export var Log: Logger;
     enum ObjectHandlerMethods {
         ProvisionObjects,
         ReadObjects
     }
-    var setupWebDialog : SP.UI.ModalDialog;
-    
+    var setupWebDialog: SP.UI.ModalDialog;
+
     function ShowWaitMessage(header, content, height, width) {
         setupWebDialog = SP.UI.ModalDialog.showWaitScreenWithNoClose(header, content, height, width);
     }
-    
-    function getSetupQueue(json) {
-        return Object.keys(json);
-    }
-    function start(json: Schema.IProvisioningTemplate, queue: Array<string>, method: ObjectHandlerMethods) {
+
+    function start(json: Schema.IProvisioningTemplate, creationInformation: Schema.IProvisioningTemplateCreationInformation, method: ObjectHandlerMethods, factory: Model.IContextFactory): JQueryDeferred<Schema.IProvisioningTemplate>{
         var def = jQuery.Deferred();
-        
+
         startTime = new Date().getTime();
-        Log.Information("Provisioning", `Starting at URL '${_spPageContextInfo.webServerRelativeUrl}'`);
-        
-        var queueItems : Array<Model.TemplateQueueItem> = [];
-        queue.forEach((q, index) => {
-            if (!ObjectHandlers[q]) return;
-            var methodname = ObjectHandlerMethods[method];
-            queueItems.push(new Model.TemplateQueueItem(q, index, json[q], json["Parameters"], new ObjectHandlers[q]()[methodname]));
-        });        
-        var results = [];
+        Log.Information("Provisioning", `Starting at URL '${factory.GetInstance().webServerRelativeUrl}'`);
+
+
+        var queueItems: Array<Model.TemplateQueueItem> = [];
+        var handlers = new Model.ObjectHandlerList();
+        handlers.List.forEach((value) => {
+            if (creationInformation["Export" + value] && ObjectHandlers[value]) {
+                queueItems.push(new Model.TemplateQueueItem(value, index, json[value], creationInformation, new ObjectHandlers[value]()[ObjectHandlerMethods[method]], factory.GetInstance()));
+            }
+        });
+
+        var results = {};
         var promises = [];
         promises.push(jQuery.Deferred());
         promises[0].resolve();
         promises[0].promise();
-       
+
         var index = 1;
-        while (queueItems[index-1] != undefined) {
+        while (queueItems[index - 1] != undefined) {
             var i = promises.length - 1;
             promises.push(queueItems[index - 1].execute(promises[i]));
-           
+
             results[queueItems[index - 1].name] = null;
             index++;
         };
-        
-        jQuery.when.apply(jQuery, promises).then(function() {
+
+        jQuery.when.apply(jQuery, promises).then(function () {
             var args = arguments;
             var n = 1;
-            for (var i in  results) {
+            for (var i in results) {
                 results[i] = <any>args[n];
                 n++;
             }
             def.resolve(results);
         });
-        
-        return def.promise();   
+
+        return def;
     }
-    export function init(template: Schema.IProvisioning, loggingOptions: Model.ILoggingOptions) {
+
+    export function publish(factory: Model.IContextFactory, template: Schema.IProvisioning, creationInformation: Schema.IProvisioningTemplateCreationInformation, loggingOptions: Model.ILoggingOptions): JQueryDeferred<Core.Logger>  {
         var def = jQuery.Deferred();
         ShowWaitMessage("Applying template", "This might take a moment..", 130, 600);
-        
+
         Log = new Logger(loggingOptions);
-        var queue = getSetupQueue(template);
-        start(template.Templates[0], queue, ObjectHandlerMethods.ProvisionObjects).then(() => {
-            var provisioningTime = ((new Date().getTime()) - startTime)/1000;
+       
+        start(template.Template, creationInformation, ObjectHandlerMethods.ProvisionObjects, factory).then(() => {
+            var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
             Log.Information("Provisioning", `All done in ${provisioningTime} seconds`);
-            Log.SaveToFile().then(() => {
+            Log.SaveToFile(factory.GetInstance()).then(() => {
                 setupWebDialog.close(null);
-                def.resolve();
+                def.resolve(Log);
             });
         });
-        
-        return def.promise();   
+
+        return def;
     }
-    export function read(template: Schema.IProvisioning, loggingOptions: Model.ILoggingOptions): JQueryDeferred<Schema.IProvisioning> {
+    export function read(factory: Model.IContextFactory, template: Schema.IProvisioning, creationInformation: Schema.IProvisioningTemplateCreationInformation, loggingOptions: Model.ILoggingOptions): JQueryDeferred<Core.Logger> {
 
 
         var def = jQuery.Deferred();
         ShowWaitMessage("Reading template", "This might take a moment..", 130, 600);
 
         Log = new Logger(loggingOptions);
-        var queue = getSetupQueue(template);
-        start(template.Templates[0], queue, ObjectHandlerMethods.ReadObjects).then((generated) => {
+      
+        start(template.Template, creationInformation, ObjectHandlerMethods.ReadObjects, factory).then((generated) => {
             var provisioningTime = ((new Date().getTime()) - startTime) / 1000;
             Log.Information("Reading", `All done in ${provisioningTime} seconds`);
-            Log.SaveToFile().then(() => {
+            Log.SaveToFile(factory.GetInstance()).then(() => {
                 setupWebDialog.close(null);
-                console.log(generated);
-                def.resolve();
+                template.Template = generated;
+                def.resolve(Log, generated);
             });
         });
-        
-       
+
+
 
         return def;
     }

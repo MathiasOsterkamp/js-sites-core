@@ -13,6 +13,8 @@ module Pzl.Sites.Core.ObjectHandlers {
 
             var def = jQuery.Deferred();
 
+            Core.Log.Information(this.name, `Audit Settings cannot be set via jsom.`);
+
             def.resolve();
 
 
@@ -20,10 +22,11 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
         ReadObjects(object: Schema.IAuditSettings) {
             Core.Log.Information(this.name, `Code execution scope started`);
-
+            
             var def = jQuery.Deferred();
-
-            def.resolve({});
+            Core.Log.Warning(this.name, `Audit Settings cannot be read via jsom.`);
+            object = new Schema.AuditSettings();
+            def.resolve(object);
 
             return def.promise();
         }

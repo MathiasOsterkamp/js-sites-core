@@ -19,13 +19,14 @@ module Pzl.Sites.Core.ObjectHandlers {
             return def.promise();
         }
         ReadObjects(object: Object) {
-            Core.Log.Information(this.name, `Code execution scope started`);
-
             var def = jQuery.Deferred();
+            object = {};
+            Core.Log.Information(this.name, `Starting reading of objects`);
 
-            def.resolve({});
+            Core.Log.Warning(this.name, `Search Schema cannot read via jsom`);
+            def.resolve(object);
 
-            return def.promise();
+            return def.promise(object);
         }
 
     }

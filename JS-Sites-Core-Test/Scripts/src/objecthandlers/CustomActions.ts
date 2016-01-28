@@ -12,9 +12,9 @@ module Pzl.Sites.Core.ObjectHandlers {
             var def = jQuery.Deferred();
             
             Core.Log.Information(this.name, `Starting provisioning of objects`);                        
- 
-            var clientContext = SP.ClientContext.get_current();
-            var userCustomActions = clientContext.get_web().get_userCustomActions();
+
+            var clientContext = this.contextFactory.ClientContext;
+            var userCustomActions = this.contextFactory.Web.get_userCustomActions();
             
             clientContext.load(userCustomActions);
             clientContext.executeQueryAsync(
@@ -72,40 +72,76 @@ module Pzl.Sites.Core.ObjectHandlers {
                 
             return def.promise();
         }
-        ReadObjects(objects: Array<Schema.ICustomAction>) {
+        ReadObjects(object: Schema.ICustomActions) {
             var def = jQuery.Deferred();
 
-            Core.Log.Information(this.name, `Starting provisioning of objects`);
+            Core.Log.Information(this.name, `Starting reading of objects`);
 
-            var clientContext = SP.ClientContext.get_current();
-            var userCustomActions = clientContext.get_web().get_userCustomActions();
-            var usercustomActionInstances: Array<SP.UserCustomAction> = [];
-            var actions = [];
+            var clientContext =this.contextFactory.ClientContext;
+            var userCustomActions = this.contextFactory.Web.get_userCustomActions();
+            var usersiteCustomActions = clientContext.get_site().get_userCustomActions();
+            var usercustomActionInstances: Array<Schema.ICustomAction> = [];
+            var usersitecustomActionInstances: Array<Schema.ICustomAction> = [];
+            object = new Schema.CustomActions();
             clientContext.load(userCustomActions);
+            clientContext.load(usersiteCustomActions);
             clientContext.executeQueryAsync(
                 () => {
                     var listEnumerator = userCustomActions.getEnumerator();
                     var i = 0;
                     while (listEnumerator.moveNext()) {
                         var action = listEnumerator.get_current();
-                        usercustomActionInstances[i] = action;
-                        var ac = {
-                            "Location": action.get_location(),
-                            "Seqeuence": action.get_sequence(),
-                            "ScriptSrc": action.get_scriptSrc(),
-                            "Name": action.get_name(),
-                            "Title": action.get_title()
-                        };
-                        actions.push(ac);
+                      
+                        var ac = new Schema.CustomAction();
+                        ac.Location = action.get_location();
+                        ac.Description = action.get_description();
+                        ac.CommandUIExtension = action.get_commandUIExtension();
+                        ac.Group = action.get_group();
+                        ac.ImageUrl = action.get_imageUrl();
+                        ac.Name = action.get_name();
+                        ac.RegistrationId = action.get_registrationId();
+                        ac.RegistrationType = action.get_registrationType();
+                        ac.ScriptBlock = action.get_scriptBlock();
+                        ac.Rights = action.get_rights();
+                        ac.ScriptSrc = action.get_scriptSrc();
+                        ac.Sequence = action.get_sequence();
+                        ac.Title = action.get_title();
+                        ac.Url = action.get_url();
+                        usercustomActionInstances.push(ac);
                         i++;
                     }
-                   
-                    def.resolve(actions);
+                    var listEnumerator = usersiteCustomActions.getEnumerator();
+                    var i = 0;
+                    while (listEnumerator.moveNext()) {
+                        var action = listEnumerator.get_current();
+
+                        var ac = new Schema.CustomAction();
+                        ac.Location = action.get_location();
+                        ac.Description = action.get_description();
+                        ac.CommandUIExtension = action.get_commandUIExtension();
+                        ac.Group = action.get_group();
+                        ac.ImageUrl = action.get_imageUrl();
+                        ac.Name = action.get_name();
+                        ac.RegistrationId = action.get_registrationId();
+                        ac.RegistrationType = action.get_registrationType();
+                        ac.ScriptBlock = action.get_scriptBlock();
+                        ac.Rights = action.get_rights();
+                        ac.ScriptSrc = action.get_scriptSrc();
+                        ac.Sequence = action.get_sequence();
+                        ac.Title = action.get_title();
+                        ac.Url = action.get_url();
+                        usersitecustomActionInstances.push(ac);
+                        i++;
+                    }
+                    object.SiteCustomActions = usersitecustomActionInstances;
+                    object.WebCustomActions = usercustomActionInstances;
+                    Core.Log.Information(this.name, `Starting reading of objects ended`);
+                    def.resolve(object);
                 },
                 (sender, args) => {
-                    Core.Log.Information(this.name, `Provisioning of objects failed`)
-                    Core.Log.Error(this.name, `${args.get_message()}`)
-                    def.resolve(sender, args);
+                    Core.Log.Information(this.name, `Reading failed`);
+                    Core.Log.Error(this.name, args.get_message());
+                    def.resolve(object);
                 });
 
             return def.promise();

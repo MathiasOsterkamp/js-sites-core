@@ -5,13 +5,13 @@
 
 module Pzl.Sites.Core.ObjectHandlers {
     module Helpers {
-        export function GetFileUrlWithoutTokens(fileUrl: string) {
-            return fileUrl.replace(/{resources}/g, `${_spPageContextInfo.siteServerRelativeUrl}/resources`)
-                .replace(/{webpartgallery}/g, `${_spPageContextInfo.siteServerRelativeUrl}/_catalogs/wp`);
+        export function GetFileUrlWithoutTokens(fileUrl: string, factory:Model.IContextFactoryInstance) {
+            return fileUrl.replace(/{resources}/g, `${factory.siteServerRelativeUrl}/resources`)
+                .replace(/{webpartgallery}/g, `${factory.siteServerRelativeUrl}/_catalogs/wp`);
         }
-        export function GetWebPartXmlWithoutTokens(xml: string) {
-            return xml.replace(/{site}/g, _spPageContextInfo.webServerRelativeUrl)
-                .replace(/{sitecollection}/g, _spPageContextInfo.siteServerRelativeUrl);
+        export function GetWebPartXmlWithoutTokens(xml: string, factory: Model.IContextFactoryInstance) {
+            return xml.replace(/{site}/g, factory.webServerRelativeUrl)
+                .replace(/{sitecollection}/g, factory.siteServerRelativeUrl);
         }
         export function GetFolderFromFilePath(filePath: string) {
             var split = filePath.split("/");
@@ -26,17 +26,17 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
     }
 
-    function AddFileByUrl(dest: string, src: string, overwrite: boolean) {
+    function AddFileByUrl(dest: string, src: string, overwrite: boolean, contextFactory: Model.IContextFactoryInstance) {
         var def = jQuery.Deferred();
 
         Core.Log.Information("Files", `Creating file with Url '${dest}'`)
 
-        var clientContext = SP.ClientContext.get_current();
-        var web = clientContext.get_web();
-        var sourceFile = Helpers.GetFileUrlWithoutTokens(src);
+        var clientContext =contextFactory.ClientContext;
+        var web =  contextFactory.Web;
+        var sourceFile = Helpers.GetFileUrlWithoutTokens(src,contextFactory);
         var destFolder = Helpers.GetFolderFromFilePath(dest);
         var destFileName = Helpers.GetFilenameFromFilePath(dest);
-        var folderServerRelativeUrl = `${_spPageContextInfo.webServerRelativeUrl}/${destFolder}`;
+        var folderServerRelativeUrl = `${contextFactory.webServerRelativeUrl}/${destFolder}`;
         var folder = web.getFolderByServerRelativeUrl(folderServerRelativeUrl);
 
         jQuery.get(sourceFile, (fileContent) => {
@@ -100,7 +100,7 @@ module Pzl.Sites.Core.ObjectHandlers {
             if (wp.Contents.FileUrl) {
                 promises.push((() => {
                     var def = jQuery.Deferred();
-                    var fileUrl = Helpers.GetFileUrlWithoutTokens(wp.Contents.FileUrl);
+                    var fileUrl = Helpers.GetFileUrlWithoutTokens(wp.Contents.FileUrl,this.cfact);
                     jQuery.get(fileUrl, (xml) => {
                         webParts[index].Contents.Xml = xml;
                         def.resolve();
@@ -118,13 +118,13 @@ module Pzl.Sites.Core.ObjectHandlers {
 
         return def.promise();
     }
-    function AddWebPartsToWebPartPage(dest: string, src: string, webParts: Array<Schema.IWebPart>, shouldRemoveExisting: Boolean) {
+    function AddWebPartsToWebPartPage(dest: string, src: string, webParts: Array<Schema.IWebPart>, shouldRemoveExisting: Boolean, contextFactory: Model.IContextFactoryInstance) {
         var def = jQuery.Deferred();
 
-        var clientContext = SP.ClientContext.get_current();
-        var web = clientContext.get_web();
+        var clientContext = contextFactory.ClientContext;
+        var web = contextFactory.Web;
         var fileUrl = Helpers.LastItemInArray(src.split("/"));
-        var fileServerRelativeUrl = `${_spPageContextInfo.webServerRelativeUrl}/${dest}`;
+        var fileServerRelativeUrl = `${contextFactory.webServerRelativeUrl}/${dest}`;
         var file = web.getFileByServerRelativeUrl(fileServerRelativeUrl);
 
         clientContext.load(file);
@@ -137,7 +137,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                         webParts.forEach(wp => {
                             if (!wp.Contents.Xml) return;
                             Core.Log.Information("Files Web Parts", `Adding web part '${wp.Title}' to zone '${wp.Zone}' for file with URL '${dest}'`);
-                            var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Contents.Xml));
+                            var oWebPartDefinition = limitedWebPartManager.importWebPart(Helpers.GetWebPartXmlWithoutTokens(wp.Contents.Xml,contextFactory));
                             var oWebPart = oWebPartDefinition.get_webPart();
                             limitedWebPartManager.addWebPart(oWebPart, wp.Zone, wp.Order);
                         });
@@ -163,11 +163,11 @@ module Pzl.Sites.Core.ObjectHandlers {
 
         return def.promise();
     }
-    function ApplyFileProperties(dest: string, fileProperties: Object) {
+    function ApplyFileProperties(dest: string, fileProperties: Object, contextFactory: Model.IContextFactoryInstance) {
         var def = jQuery.Deferred();
-        var clientContext = SP.ClientContext.get_current();
-        var web = clientContext.get_web();
-        var fileServerRelativeUrl = `${_spPageContextInfo.webServerRelativeUrl}/${dest}`;
+        var clientContext =contextFactory.ClientContext;
+        var web =  contextFactory.Web;
+        var fileServerRelativeUrl = `${contextFactory.webServerRelativeUrl}/${dest}`;
         var file = web.getFileByServerRelativeUrl(fileServerRelativeUrl);
         var listItemAllFields = file.get_listItemAllFields();
 
@@ -192,8 +192,8 @@ module Pzl.Sites.Core.ObjectHandlers {
 
         return def.promise();
     }
-    function GetViewFromCollectionByUrl(viewCollection: SP.ViewCollection, url: string) {
-        var serverRelativeUrl = `${_spPageContextInfo.webServerRelativeUrl}/${url}`;
+    function GetViewFromCollectionByUrl(viewCollection: SP.ViewCollection, url: string, contextFactory: Model.IContextFactoryInstance) {
+        var serverRelativeUrl = `${contextFactory.webServerRelativeUrl}/${url}`;
         var viewCollectionEnumerator = viewCollection.getEnumerator();
         while (viewCollectionEnumerator.moveNext()) {
             var view = viewCollectionEnumerator.get_current();
@@ -203,11 +203,11 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
         return null;
     }
-    function ModifyHiddenViews(objects: Array<Schema.IFile>) {
+    function ModifyHiddenViews(objects: Array<Schema.IFile>, contextFactory: Model.IContextFactoryInstance) {
         Core.Log.Information("Hidden Views", `Code execution scope started`)
         var def = jQuery.Deferred();
-        var clientContext = SP.ClientContext.get_current();
-        var web = clientContext.get_web();
+        var clientContext =contextFactory.ClientContext;
+        var web =  contextFactory.Web;
         var mapping = {};
         var lists: Array<SP.List> = [];
         var listViewCollections: Array<SP.ViewCollection> = [];
@@ -234,7 +234,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                     var list = lists[index];
                     var viewCollection = listViewCollections[index];
                     views.forEach((v) => {
-                        var view = GetViewFromCollectionByUrl(viewCollection, v.Url);
+                        var view = GetViewFromCollectionByUrl(viewCollection, v.Url, contextFactory);
                         if(view == null) return;
                         Core.Log.Information("Hidden Views", `Modifying list view with Url '${v.Url}' for list '${l}'`);
                         if (v.Paged) { view.set_paged(v.Paged); }
@@ -269,7 +269,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                 def.resolve(sender, args);
             }
         );
-
+         
         return def.promise();
     }
 
@@ -280,16 +280,16 @@ module Pzl.Sites.Core.ObjectHandlers {
         ProvisionObjects(objects: Array<Schema.IFile>) {
             Core.Log.Information(this.name, `Code execution scope started`);
             var def = jQuery.Deferred();
-            var clientContext = SP.ClientContext.get_current();
+            var clientContext =this.contextFactory.ClientContext;
             var promises = [];
             objects.forEach(function(obj) {
-                AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite);
+                AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite, this.contextFactory);
             });
             jQuery.when.apply(jQuery, promises).done(() => {
                 var promises = [];
                 objects.forEach((obj) => {
                     if (obj.WebParts && obj.WebParts.length > 0) {
-                        promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
+                        promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts, this.contextFactory));
                     }
                 });
 
@@ -297,13 +297,13 @@ module Pzl.Sites.Core.ObjectHandlers {
                     var promises = [];
                     objects.forEach((obj) => {
                         if (obj.Properties && Object.keys(obj.Properties).length > 0) {
-                            promises.push(ApplyFileProperties(obj.Folder, obj.Properties));
+                            promises.push(ApplyFileProperties(obj.Folder, obj.Properties, this.contextFactory));
                         }
                     });
 
 
                     jQuery.when.apply(jQuery, promises).done(() => {
-                        ModifyHiddenViews(objects).then(() => {
+                        ModifyHiddenViews(objects, this.contextFactory).then(() => {
                             Core.Log.Information(this.name, `Code execution scope ended`);
                             def.resolve();
                         });
@@ -317,38 +317,9 @@ module Pzl.Sites.Core.ObjectHandlers {
         ReadObjects(objects: Array<Schema.IFile>) {
             Core.Log.Information(this.name, `Code execution scope started`);
             var def = jQuery.Deferred();
-            var clientContext = SP.ClientContext.get_current();
-            var promises = [];
-            objects.forEach(function (obj) {
-                AddFileByUrl(obj.Folder, obj.Src, obj.Overwrite);
-            });
-            jQuery.when.apply(jQuery, promises).done(() => {
-                var promises = [];
-                objects.forEach((obj) => {
-                    if (obj.WebParts && obj.WebParts.length > 0) {
-                        promises.push(AddWebPartsToWebPartPage(obj.Folder, obj.Src, obj.WebParts, obj.RemoveExistingWebParts));
-                    }
-                });
-
-                jQuery.when.apply(jQuery, promises).done(() => {
-                    var promises = [];
-                    objects.forEach((obj) => {
-                        if (obj.Properties && Object.keys(obj.Properties).length > 0) {
-                            promises.push(ApplyFileProperties(obj.Folder, obj.Properties));
-                        }
-                    });
-
-
-                    jQuery.when.apply(jQuery, promises).done(() => {
-                        ModifyHiddenViews(objects).then(() => {
-                            Core.Log.Information(this.name, `Code execution scope ended`);
-                            def.resolve();
-                        });
-                    });
-                });
-            });
-
-
+            objects = [];
+            Core.Log.Warning(this.name, `Files cannot read`);
+            def.resolve(objects);
             return def.promise();
         }
     }

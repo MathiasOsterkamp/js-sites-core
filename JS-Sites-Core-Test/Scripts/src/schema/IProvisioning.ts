@@ -11,9 +11,9 @@
 
 module Pzl.Sites.Core.Schema {
     export interface IProvisioning{
-        Templates: Array<IProvisioningTemplate>;
+        Template:IProvisioningTemplate;
     }
     export class Provisioning implements IProvisioning {
-        Templates: Array<IProvisioningTemplate>;
+        Template: IProvisioningTemplate;
     }
 }

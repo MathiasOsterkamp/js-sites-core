@@ -29,11 +29,11 @@ module Pzl.Sites.Core.ObjectHandlers {
 
         return def.promise();
     }
-    export function CreateFolders(clientContext: SP.ClientContext, list: SP.List, listUrl: string, folders: Array<Schema.IFolder>) {
+    export function CreateFolders(clientContext: SP.ClientContext, list: SP.List, listUrl: string, folders: Array<Schema.IFolder>, contextFactory: Model.IContextFactoryInstance) {
         Core.Log.Information("Lists Folders", `Code execution scope started`)
-
+        
         var def = jQuery.Deferred();
-        var listRelativeUrl = `${_spPageContextInfo.webServerRelativeUrl}/${listUrl}`;
+        var listRelativeUrl = `${contextFactory.webServerRelativeUrl}/${listUrl}`;
         var rootFolder = clientContext.get_web().getFolderByServerRelativeUrl(listRelativeUrl);
         var metadataDefaults = "<MetadataDefaults>";
         var setMetadataDefaults = false;
@@ -142,7 +142,7 @@ module Pzl.Sites.Core.ObjectHandlers {
             }
         });
 
-        var web = clientContext.get_web();
+        var web =  this.contextFactory.Web;
         var allProperties = web.get_allProperties();
         var siteGroups = web.get_siteGroups();
         var roleDefinitions = web.get_roleDefinitions();
@@ -194,9 +194,9 @@ module Pzl.Sites.Core.ObjectHandlers {
             });
         return def.promise();
     }
-    function GetViewFromCollectionByUrl(viewCollection: SP.ViewCollection, url: string) {
+    function GetViewFromCollectionByUrl(viewCollection: SP.ViewCollection, url: string, contextFactory: Model.IContextFactoryInstance) {
         var view = jQuery.grep(viewCollection.get_data(), (v) => {
-            return v.get_serverRelativeUrl() == `${_spPageContextInfo.siteServerRelativeUrl}/${url}`;
+            return v.get_serverRelativeUrl() == `${contextFactory.siteServerRelativeUrl}/${url}`;
         });
         return view ? view[0] : null;
     }
@@ -280,7 +280,7 @@ module Pzl.Sites.Core.ObjectHandlers {
             Core.Log.Information(this.name, `Code execution scope started`);
             var def = jQuery.Deferred();
 
-            var clientContext = SP.ClientContext.get_current();
+            var clientContext =this.contextFactory.ClientContext;
             var lists = clientContext.get_web().get_lists();
             var listInstances: Array<SP.List> = [];
 
@@ -288,7 +288,7 @@ module Pzl.Sites.Core.ObjectHandlers {
             clientContext.executeQueryAsync(
                 () => {
                     objects.forEach((obj, index) => {
-                        var existingObj: any = jQuery.grep(lists.get_data(), (list) => {
+                        var existingObj: any = jQuery.grep(lists.get_data(), (list:SP.List) => {
                             return list.get_title() == obj.Title;
                         })[0];
 
@@ -323,7 +323,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                                         var promises = [];
                                         objects.forEach(function(obj, index) {
                                             if (obj.Folders && obj.Folders.length > 0) {
-                                                promises.push(CreateFolders(clientContext, listInstances[index], obj.Url, obj.Folders));
+                                                promises.push(CreateFolders(clientContext, listInstances[index], obj.Url, obj.Folders, this.contextFactory));
                                             }
                                         });
                                         jQuery.when.apply(jQuery, promises).done(() => {
@@ -359,8 +359,8 @@ module Pzl.Sites.Core.ObjectHandlers {
         ReadObjects(objects: Array<Schema.IListInstance>) {
             Core.Log.Information(this.name, `Code execution scope started`);
             var def = jQuery.Deferred();
-            var listobjects = [];
-            var clientContext = SP.ClientContext.get_current();
+            objects = [];
+            var clientContext =this.contextFactory.ClientContext;
             var lists = clientContext.get_web().get_lists();
             var listInstances: Array<SP.List> = [];
 
@@ -371,23 +371,13 @@ module Pzl.Sites.Core.ObjectHandlers {
                     var i = 0;
                     while (listEnumerator.moveNext()) {
                         listInstances[i] = listEnumerator.get_current();
-                        
-                        var list = {
-                            "Title": listInstances[i].get_title(),
-                            "Url": "",
-                            "TemplateType": listInstances[i].get_baseType(),
-                            "Security": {
+                        var list = new Schema.ListInstance();
+                        list.Title = listInstances[i].get_title();
+                        list.TemplateType = listInstances[i].get_baseType();
+                        list.FieldRefs = [];
 
 
-                            },
-                            "Folders": [
-
-                            ],
-                            "ContentTypeBindings": [
-
-                            ]
-                        };
-                        listobjects.push(list);
+                        objects.push(list);
                         clientContext.load(listInstances[i].get_contentTypes());
                         clientContext.load(listInstances[i].get_views());
                         clientContext.load(listInstances[i].get_roleAssignments());
@@ -401,13 +391,13 @@ module Pzl.Sites.Core.ObjectHandlers {
 
                     if (!clientContext.get_hasPendingRequest()) {
                         Core.Log.Information(this.name, `Code execution scope ended`);
-                        def.resolve(listobjects);
+                        def.resolve(objects);
                         return def.promise();
                     }
 
                     clientContext.executeQueryAsync(
                         () => {
-                            def.resolve(listobjects);
+                            def.resolve(objects);
                            
                         },
                         (sender, args) => {
@@ -417,9 +407,9 @@ module Pzl.Sites.Core.ObjectHandlers {
                         });
                 },
                 (sender, args) => {
-                    Core.Log.Error(this.name, `Error: ${args.get_message()}`);
-                    Core.Log.Information(this.name, `Provisioning of objects failed`);
-                    def.resolve(sender, args);
+                    Core.Log.Information(this.name, `Reading failed`);
+                    Core.Log.Error(this.name, args.get_message());
+                    def.resolve(objects);
                 });
 
             return def.promise();

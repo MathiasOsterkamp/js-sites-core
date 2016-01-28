@@ -83,5 +83,23 @@
     <ProjectItemFile Source="src\objecthandlers\TermGroups.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
     <ProjectItemFile Source="src\objecthandlers\Publishing.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
     <ProjectItemFile Source="src\objecthandlers\AddIns.ts" Target="Scripts\src\objecthandlers\" Type="ElementFile" />
+    <ProjectItemFile Source="src\model\IContextFactory.ts" Target="Scripts\src\model\" Type="ElementFile" />
+    <ProjectItemFile Source="src\schema\IProvisioningTemplateCreationInformation.ts" Target="Scripts\src\schema\" Type="ElementFile" />
+    <ProjectItemFile Source="src\model\ObjectHandlerList.ts" Target="Scripts\src\model\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\NavigationType.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\BuiltInFieldId.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\BuiltInIdentity.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\TimeZone.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\TenantEnums.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\StructuralNavigationSorting.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\StructuralNavigationSortBy.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\SharePointPlatform.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\EcmSiteRecordRestrictions.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\EcmRecordDeclarationBy.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\EcmListManualRecordDeclaration.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\WikiPageLayout.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\VotingExperience.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\BuiltInContentTypeId.ts" Target="Scripts\src\enums\" Type="ElementFile" />
+    <ProjectItemFile Source="src\enums\Constants.ts" Target="Scripts\src\enums\" Type="ElementFile" />
   </Files>
 </ProjectItem>

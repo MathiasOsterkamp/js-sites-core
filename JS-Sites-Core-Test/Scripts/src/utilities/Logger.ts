@@ -31,12 +31,19 @@ module Pzl.Sites.Core {
             }
             this.array.push(logMsg);
         }
-
+        Warning(objectHandler: string, msg: string) {
+            if (!this.loggingOptions) return;
+            var logMsg = `${new Date()} || Warning || ${objectHandler} || ${msg}`;
+            if (this.loggerEnabled && this.loggingOptions.On) {
+                console.log(logMsg);
+            }
+            this.array.push(logMsg);
+        }
         toString() {
             return this.array.join("\n");
         }
 
-        SaveToFile() {            
+        SaveToFile(contextFactory: Model.IContextFactoryInstance) {            
             var def = jQuery.Deferred();
             console.log(this.array);
             if(!this.loggingOptions || !this.loggingOptions.LoggingFolder) {
@@ -44,7 +51,7 @@ module Pzl.Sites.Core {
                 return def.promise();
             }            
             
-            var clientContext = SP.ClientContext.get_current();
+            var clientContext =contextFactory.ClientContext;
             var web = clientContext.get_site().get_rootWeb();
             var fileName = `${new Date().getTime()}.txt`;
             var fileCreateInfo = new SP.FileCreationInformation();

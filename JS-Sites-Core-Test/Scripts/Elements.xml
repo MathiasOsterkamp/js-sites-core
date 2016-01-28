@@ -82,5 +82,23 @@
     <File Path="Scripts\src\objecthandlers\TermGroups.ts" Url="Scripts/src/objecthandlers/TermGroups.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\objecthandlers\Publishing.ts" Url="Scripts/src/objecthandlers/Publishing.ts" ReplaceContent="TRUE" />
     <File Path="Scripts\src\objecthandlers\AddIns.ts" Url="Scripts/src/objecthandlers/AddIns.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\model\IContextFactory.ts" Url="Scripts/src/model/IContextFactory.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\schema\IProvisioningTemplateCreationInformation.ts" Url="Scripts/src/schema/IProvisioningTemplateCreationInformation.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\model\ObjectHandlerList.ts" Url="Scripts/src/model/ObjectHandlerList.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\NavigationType.ts" Url="Scripts/src/enums/NavigationType.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\BuiltInFieldId.ts" Url="Scripts/src/enums/BuiltInFieldId.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\BuiltInIdentity.ts" Url="Scripts/src/enums/BuiltInIdentity.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\TimeZone.ts" Url="Scripts/src/enums/TimeZone.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\TenantEnums.ts" Url="Scripts/src/enums/TenantEnums.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\StructuralNavigationSorting.ts" Url="Scripts/src/enums/StructuralNavigationSorting.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\StructuralNavigationSortBy.ts" Url="Scripts/src/enums/StructuralNavigationSortBy.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\SharePointPlatform.ts" Url="Scripts/src/enums/SharePointPlatform.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\EcmSiteRecordRestrictions.ts" Url="Scripts/src/enums/EcmSiteRecordRestrictions.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\EcmRecordDeclarationBy.ts" Url="Scripts/src/enums/EcmRecordDeclarationBy.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\EcmListManualRecordDeclaration.ts" Url="Scripts/src/enums/EcmListManualRecordDeclaration.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\WikiPageLayout.ts" Url="Scripts/src/enums/WikiPageLayout.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\VotingExperience.ts" Url="Scripts/src/enums/VotingExperience.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\BuiltInContentTypeId.ts" Url="Scripts/src/enums/BuiltInContentTypeId.ts" ReplaceContent="TRUE" />
+    <File Path="Scripts\src\enums\Constants.ts" Url="Scripts/src/enums/Constants.ts" ReplaceContent="TRUE" />
   </Module>
 </Elements>

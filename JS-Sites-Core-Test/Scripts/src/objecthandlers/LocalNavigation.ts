@@ -4,14 +4,14 @@
 
 module Pzl.Sites.Core.ObjectHandlers {
     module Helpers {
-        export function GetUrlWithoutTokens(url: string) {
-            return url.replace("{Site}", _spPageContextInfo.webAbsoluteUrl)
-                .replace("{SiteRelativeUrl}", _spPageContextInfo.webServerRelativeUrl)
-                .replace("{SiteUrl}", _spPageContextInfo.webAbsoluteUrl)
-                .replace("{SiteUrlEncoded}", encodeURIComponent(_spPageContextInfo.webAbsoluteUrl))
-                .replace("{SiteCollection}", _spPageContextInfo.siteAbsoluteUrl)
-                .replace("{SiteCollectionRelativeUrl}", _spPageContextInfo.siteServerRelativeUrl)
-                .replace("{SiteCollectionEncoded}", encodeURIComponent(_spPageContextInfo.siteAbsoluteUrl))
+        export function GetUrlWithoutTokens(url: string, factory: Model.ContextFactoryInstance) {
+            return url.replace("{Site}", factory.webAbsoluteUrl)
+                .replace("{SiteRelativeUrl}", factory.webServerRelativeUrl)
+                .replace("{SiteUrl}", factory.webAbsoluteUrl)
+                .replace("{SiteUrlEncoded}", encodeURIComponent(factory.webAbsoluteUrl))
+                .replace("{SiteCollection}", factory.siteAbsoluteUrl)
+                .replace("{SiteCollectionRelativeUrl}", factory.siteServerRelativeUrl)
+                .replace("{SiteCollectionEncoded}", encodeURIComponent(factory.siteAbsoluteUrl))
                 .replace("{WebApp}", window.location.protocol + "//" + window.location.host);
         }
         export function GetNodeFromQuickLaunchByTitle(nodeCollection, title) {
@@ -28,8 +28,8 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
         ProvisionObjects(objects: Array<Schema.INavigationNode>) {
             var def = jQuery.Deferred();
-            var clientContext = SP.ClientContext.get_current();
-            var web = clientContext.get_web();
+            var clientContext =this.contextFactory.ClientContext;
+            var web =  this.contextFactory.Web;
 
             Core.Log.Information(this.name, `Starting provisioning of objects`);
             const navigation = web.get_navigation();
@@ -52,7 +52,7 @@ module Pzl.Sites.Core.ObjectHandlers {
                             const existingNode = Helpers.GetNodeFromQuickLaunchByTitle(temporaryQuickLaunch, obj.Title);
                             const newNode = new SP.NavigationNodeCreationInformation();
                             newNode.set_title(obj.Title);
-                            newNode.set_url(existingNode ? existingNode.get_url() : Helpers.GetUrlWithoutTokens(obj.Url));
+                            newNode.set_url(existingNode ? existingNode.get_url() : Helpers.GetUrlWithoutTokens(obj.Url, this.contextFactory));
                             newNode.set_asLastNode(true);
                             quickLaunchNodeCollection.add(newNode);
                         });
@@ -77,8 +77,8 @@ module Pzl.Sites.Core.ObjectHandlers {
         }
         ReadObjects(objects: Array<Schema.INavigationNode>) {
             var def = jQuery.Deferred();
-            var clientContext = SP.ClientContext.get_current();
-            var web = clientContext.get_web();
+            var clientContext =this.contextFactory.ClientContext;
+            var web =  this.contextFactory.Web;
 
             Core.Log.Information(this.name, `Starting reading of objects`);
             const navigation = web.get_navigation();
